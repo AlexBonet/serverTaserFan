@@ -17,7 +17,7 @@ public class ImpVehiculoService implements IVehiculoService{
     }
 
     @Override
-    public Result<Vehiculo> update(String matricula) {
+    public Result<Vehiculo> update(Vehiculo v) {
         return null;
     }
 

@@ -21,25 +21,45 @@ public class VehiculoController {
 
     public static List<Vehiculo> getVehiculos(Request request, Response response) {
         logger.info("Obteniendo vehiculos... ");
+
         return service.getAll();
     }
 
     public static Result<Vehiculo> addVehiculos(Request request, Response response) {
         logger.info("Añadiendo vehiculo... ");
 
+        Vehiculo v = jsonTransformer.getObjet(request.body(), Vehiculo.class);
+        Result<Vehiculo> result = service.add(v);
 
-        return null;
+        if(result instanceof Result.Success)
+            response.status(200);
+        else {
+            Result.Error error = (Result.Error)result;
+            response.status(error.getCode());
+        }
+
+        return result;
     }
 
     public static Result<Vehiculo> delVehiculos(Request request, Response response) {
         logger.info("Eliminando vehiculo... ");
 
-        return null;
+        return service.delete(request.queryParams("matricula"));
     }
 
     public static Result<Vehiculo> updVehiculos(Request request, Response response) {
         logger.info("Actualizando vehiculo... ");
 
-        return null;
+        Vehiculo v = jsonTransformer.getObjet(request.body(), Vehiculo.class);
+        Result<Vehiculo> result = service.update(v);
+
+        if(result instanceof Result.Success)
+            response.status(200);
+        else {
+            Result.Error error = (Result.Error)result;
+            response.status(error.getCode());
+        }
+
+        return result;
     }
 }
