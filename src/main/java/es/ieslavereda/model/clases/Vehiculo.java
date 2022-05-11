@@ -1,7 +1,7 @@
-package es.ieslavereda.model;
+package es.ieslavereda.model.clases;
 
+import java.sql.Date;
 import java.sql.Timestamp;
-import java.util.Date;
 
 public abstract class Vehiculo {
     private String matricula;
