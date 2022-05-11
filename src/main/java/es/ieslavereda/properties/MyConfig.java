@@ -5,7 +5,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Properties;
-
+//TODO
 public class MyConfig {
 
     private static MyConfig instance;
@@ -82,15 +82,12 @@ public class MyConfig {
     public String getOracleDBHost() {
         return appProperties.getProperty("ORACLE_DB_HOST");
     }
-
     public String getOracleDBPort() {
         return appProperties.getProperty("ORACLE_DB_PORT");
     }
-
     public String getOracleUsername() {
         return appProperties.getProperty("O_USERNAME");
     }
-
     public String getOraclePassword() {
         return appProperties.getProperty("0_PASSWORD");
     }

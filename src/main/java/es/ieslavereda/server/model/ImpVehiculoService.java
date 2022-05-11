@@ -4,7 +4,7 @@ import es.ieslavereda.model.Result;
 import es.ieslavereda.model.clases.Vehiculo;
 
 import java.util.List;
-
+//TODO tots els metodos
 public class ImpVehiculoService implements IVehiculoService{
     @Override
     public List<Vehiculo> getAll() {

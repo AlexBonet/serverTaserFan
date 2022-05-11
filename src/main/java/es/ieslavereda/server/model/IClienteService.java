@@ -9,6 +9,6 @@ import java.util.List;
 public interface IClienteService {
     List<Cliente> getAll();
     Result<Cliente> auth(AuthenticateData ad);
-    Result<Cliente> get(); //fa falta? y si vuic enseñar tota la info?
+    Cliente get(String id); //fa falta? y si vuic enseñar tota la info?
 
 }
