@@ -1,5 +1,6 @@
 package es.ieslavereda.server.model;
 
+import es.ieslavereda.model.AuthenticateData;
 import es.ieslavereda.model.clases.Cliente;
 import es.ieslavereda.model.Result;
 
@@ -12,17 +13,7 @@ public class ImpClienteService implements IClienteService{
     }
 
     @Override
-    public Result<Cliente> delete() {
-        return null;
-    }
-
-    @Override
-    public Result<Cliente> update() {
-        return null;
-    }
-
-    @Override
-    public Result<Cliente> add() {
+    public Result<Cliente> auth(AuthenticateData ad) {
         return null;
     }
 
