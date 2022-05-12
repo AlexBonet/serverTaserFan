@@ -3,7 +3,7 @@ package es.ieslavereda.model.clases;
 import java.sql.Date;
 import java.sql.Timestamp;
 
-public abstract class Vehiculo {
+public class Vehiculo {
     private String matricula;
     private float precioHora;
     private String marca;
