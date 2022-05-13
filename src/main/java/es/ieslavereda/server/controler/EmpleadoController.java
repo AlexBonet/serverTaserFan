@@ -3,6 +3,7 @@ package es.ieslavereda.server.controler;
 import es.ieslavereda.model.AuthenticateData;
 import es.ieslavereda.model.Result;
 import es.ieslavereda.model.clases.Cliente;
+import es.ieslavereda.model.clases.Empleado;
 import es.ieslavereda.server.model.IEmpleadoService;
 import es.ieslavereda.server.model.ImpEmpleadoService;
 import es.ieslavereda.server.model.JsonTransformer;
@@ -18,16 +19,16 @@ public class EmpleadoController {
     static Logger logger = LoggerFactory.getLogger(EmpleadoController.class);
 
     private static IEmpleadoService service = new ImpEmpleadoService();
-    private static JsonTransformer<Cliente> jsonTransformer = new JsonTransformer<>();
+    private static JsonTransformer<Empleado> jsonTransformer = new JsonTransformer<>();
 
-    public static Result<Cliente> authenticate(Request request, Response response) {
+    public static Result<Empleado> authenticate(Request request, Response response) {
         logger.info("Autenticando... ");
         String body = request.body();
 
         JsonTransformer<AuthenticateData> jst = new JsonTransformer<>();
         AuthenticateData ad = jst.getObjet(body,AuthenticateData.class);
 
-        Result<Cliente> result = service.auth(ad);
+        Result<Empleado> result = service.auth(ad);
 
         if(result instanceof Result.Success){
             response.status(200);
@@ -38,13 +39,13 @@ public class EmpleadoController {
         return result;
     }
 
-    public static List<Cliente> getClientes(Request request, Response response) {
-        logger.info("Obteniendo todos los clientes... ");
+    public static List<Empleado> getEmpleados(Request request, Response response) {
+        logger.info("Obteniendo todos los empleados... ");
         return service.getAll();
     }
 
-    public static Cliente getCliente(Request request, Response response) {
-        logger.info("Obteniendo cliente... ");
+    public static Empleado getEmpleado(Request request, Response response) {
+        logger.info("Obteniendo empleado... ");
 
         String id = request.queryParams("id");
 

@@ -4,8 +4,8 @@ public class API {
     public static class Routes{
         //Clientes
         public static final String AUTHENTICATE ="/auth";
-        public static final String ALL_CLIENTES ="/clientes";
-        public static final String GET_CLIENTE ="/cliente";
+        public static final String ALL_EMPLEADOS ="/empleados";
+        public static final String GET_EMPLEADO ="/empleado";
 
         //Vehiculos
         public static final String ALL_VEHI ="/vehiculos";

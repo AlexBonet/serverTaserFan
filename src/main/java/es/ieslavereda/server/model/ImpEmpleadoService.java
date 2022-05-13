@@ -16,7 +16,7 @@ public class ImpEmpleadoService implements IEmpleadoService {
         List<Empleado> empleados = new ArrayList<>();
 
         DataSource ds = MyDataSource.getMyOracleDataSource();
-        String sql = "SELECT * FROM person";
+        String sql = "SELECT * FROM empleado";
         try (Connection con = ds.getConnection();
              Statement stmt = con.createStatement();
              ResultSet rs = stmt.executeQuery(sql)) {
@@ -38,7 +38,7 @@ public class ImpEmpleadoService implements IEmpleadoService {
         return empleados;
     }
 
-    @Override //TODO
+    @Override //TODO?
     public Result<Empleado> auth(AuthenticateData ad) {
         DataSource ds = MyDataSource.getMyOracleDataSource();
         Empleado e = null;
@@ -50,7 +50,7 @@ public class ImpEmpleadoService implements IEmpleadoService {
             stmt.setString(++pos, ad.getPassword());
             ResultSet rs = stmt.executeQuery();
             if(rs.next()){
-                e = new Empleado(rs.getInt("idCliente"), rs.getString("dni"),
+                e = new Empleado(rs.getInt("idEmpleado"), rs.getString("dni"),
                         rs.getString("nombre"), rs.getString("apellidos"),
                         rs.getString("domicilio"),rs.getString("cp"),
                         rs.getString("email"),rs.getDate("fechaNac"),
@@ -70,13 +70,13 @@ public class ImpEmpleadoService implements IEmpleadoService {
     public Empleado get(String id) {
         Empleado empleado=null;
         DataSource ds = MyDataSource.getMyOracleDataSource();
-        String sql = "SELECT * FROM cliente WHERE dni LIKE '" + id + "'";
+        String sql = "SELECT * FROM empleado WHERE dni LIKE '" + id + "'";
         try (Connection con = ds.getConnection();
              Statement stmt = con.createStatement();
              ResultSet rs = stmt.executeQuery(sql)) {
 
             if (rs.next()) {
-                empleado = new Empleado(rs.getInt("idCliente"), rs.getString("dni"),
+                empleado = new Empleado(rs.getInt("idEmpleado"), rs.getString("dni"),
                         rs.getString("nombre"), rs.getString("apellidos"),
                         rs.getString("domicilio"),rs.getString("cp"),
                         rs.getString("email"),rs.getDate("fechaNac"),
