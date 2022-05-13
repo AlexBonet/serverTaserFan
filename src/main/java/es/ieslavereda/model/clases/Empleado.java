@@ -34,6 +34,18 @@ public class Empleado {
         this.changeBy = changeBy;
     }
 
+    public Empleado(int idCliente, String dni, String nombre, String apellidos, String domicilio, String cp, String email, Date fechaNac, String cargo) {
+        this.idCliente = idCliente;
+        this.dni = dni;
+        this.nombre = nombre;
+        this.apellidos = apellidos;
+        this.domicilio = domicilio;
+        this.cp = cp;
+        this.email = email;
+        this.fechaNac = fechaNac;
+        this.cargo = cargo;
+    }
+
     public Empleado() {
     }
 

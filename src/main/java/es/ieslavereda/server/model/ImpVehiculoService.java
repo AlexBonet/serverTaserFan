@@ -10,14 +10,14 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-//TODO tots els metodos
+//TODO
 public class ImpVehiculoService implements IVehiculoService{
     @Override
     public List<Vehiculo> getAll() {
         List<Vehiculo> vehiculos = new ArrayList<>();
 
         DataSource ds = MyDataSource.getMyOracleDataSource();
-        String sql = "SELECT * FROM person";
+        String sql = "SELECT * FROM vehiculo";
         try (Connection con = ds.getConnection();
              Statement stmt = con.createStatement();
              ResultSet rs = stmt.executeQuery(sql)) {
