@@ -11,6 +11,11 @@ public class Bicicleta extends Vehiculo {
         this.tipo = tipo;
     }
 
+    public Bicicleta(String matricula, float precioHora, String marca, String descripcion, String color, int bateria, Date fechaAdq, String estado, int idCarnet, String tipo) {
+        super(matricula, precioHora, marca, descripcion, color, bateria, fechaAdq, estado, idCarnet);
+        this.tipo = tipo;
+    }
+
     public Bicicleta(String tipo) {
         this.tipo = tipo;
     }

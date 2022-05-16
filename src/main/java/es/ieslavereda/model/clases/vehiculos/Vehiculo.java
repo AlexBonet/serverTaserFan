@@ -1,5 +1,7 @@
 package es.ieslavereda.model.clases.vehiculos;
 
+import oracle.sql.DATE;
+
 import java.sql.Date;
 import java.sql.Timestamp;
 
@@ -43,6 +45,8 @@ public class Vehiculo {
         this.fechaAdq = fechaAdq;
         this.estado = estado;
         this.idCarnet = idCarnet;
+        this.changeDts = null;
+        this.changeBy = "AÑADIDO CON EL SERVIDOR";
     }
 
     public String getMatricula() {

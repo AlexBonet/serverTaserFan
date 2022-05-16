@@ -13,6 +13,12 @@ public class Moto extends Vehiculo {
         this.cilindrada = cilindrada;
     }
 
+    public Moto(String matricula, float precioHora, String marca, String descripcion, String color, int bateria, Date fechaAdq, String estado, int idCarnet, int velocidadMax, int cilindrada) {
+        super(matricula, precioHora, marca, descripcion, color, bateria, fechaAdq, estado, idCarnet);
+        this.velocidadMax = velocidadMax;
+        this.cilindrada = cilindrada;
+    }
+
     public Moto(int velocidadMax, int cilindrada) {
         this.velocidadMax = velocidadMax;
         this.cilindrada = cilindrada;
