@@ -42,6 +42,7 @@ public class EmpleadoController {
     public static List<Empleado> getEmpleados(Request request, Response response) {
         logger.info("Obteniendo todos los empleados... ");
         return service.getAll();
+
     }
 
     public static Empleado getEmpleado(Request request, Response response) {

@@ -24,7 +24,7 @@ public class ImpEmpleadoService implements IEmpleadoService {
             Empleado empleado;
 
             while (rs.next()) {
-                empleado = new Empleado(rs.getInt("idCliente"), rs.getString("dni"),
+                empleado = new Empleado(rs.getInt("IDEMPLEADO"), rs.getString("dni"),
                         rs.getString("nombre"), rs.getString("apellidos"),
                         rs.getString("domicilio"),rs.getString("cp"),
                         rs.getString("email"),rs.getDate("fechaNac"),
@@ -38,7 +38,7 @@ public class ImpEmpleadoService implements IEmpleadoService {
         return empleados;
     }
 
-    @Override //TODO?
+    @Override //TODO, dona error de datos incorrectos
     public Result<Empleado> auth(AuthenticateData ad) {
         DataSource ds = MyDataSource.getMyOracleDataSource();
         Empleado e = null;

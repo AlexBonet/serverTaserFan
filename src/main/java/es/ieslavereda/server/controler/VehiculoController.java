@@ -1,7 +1,7 @@
 package es.ieslavereda.server.controler;
 
 import es.ieslavereda.model.Result;
-import es.ieslavereda.model.clases.Vehiculo;
+import es.ieslavereda.model.clases.vehiculos.Vehiculo;
 import es.ieslavereda.server.model.IVehiculoService;
 import es.ieslavereda.server.model.ImpVehiculoService;
 import es.ieslavereda.server.model.JsonTransformer;
@@ -12,7 +12,6 @@ import spark.Response;
 
 import java.util.List;
 
-//TODO posar metodos
 public class VehiculoController {
     static Logger logger = LoggerFactory.getLogger(VehiculoController.class);
 

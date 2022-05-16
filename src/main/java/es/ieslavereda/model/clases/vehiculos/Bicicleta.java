@@ -1,4 +1,4 @@
-package es.ieslavereda.model.clases;
+package es.ieslavereda.model.clases.vehiculos;
 
 import java.sql.Timestamp;
 import java.sql.Date;

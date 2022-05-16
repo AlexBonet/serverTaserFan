@@ -1,4 +1,4 @@
-package es.ieslavereda.model.clases;
+package es.ieslavereda.model.clases.vehiculos;
 
 import java.sql.Date;
 import java.sql.Timestamp;
@@ -32,6 +32,8 @@ public class Vehiculo {
 
     public Vehiculo() {
     }
+
+
 
     public String getMatricula() {
         return matricula;

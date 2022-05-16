@@ -1,5 +1,5 @@
 package es.ieslavereda.server;
-//TODO
+
 public class API {
     public static class Routes{
         //Clientes
@@ -7,11 +7,12 @@ public class API {
         public static final String ALL_EMPLEADOS ="/empleados";
         public static final String GET_EMPLEADO ="/empleado";
 
-        //Vehiculos
-        public static final String ALL_VEHI ="/vehiculos";
-        public static final String ADD_VEHI ="/addvehi";
-        public static final String DEL_VEHI ="/delvehi";
-        public static final String UPD_VEHI ="/updvehi";
+        //Vehiculos : tenim soles una ruta perque cuant fem algo en la app dira que tipo es [post,get,put,dlt]
+        public static final String COCHE ="/coche";
+        public static final String MOTOS ="/motos";
+        public static final String PATIN ="/patin";
+        public static final String BICIS ="/bicis";
+
 
     }
 }

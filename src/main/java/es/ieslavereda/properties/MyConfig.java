@@ -5,7 +5,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Properties;
-//TODO
+//TODO, mirar  si esta bé els noms en els gets y mirar de tindre bé els properties
 public class MyConfig {
 
     private static MyConfig instance;
