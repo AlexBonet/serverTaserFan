@@ -14,127 +14,11 @@ import java.util.List;
  */
 //TODO
 public class ImpVehiculoService implements IVehiculoService{
-    //    @Override
-//    public List<Vehiculo> getAll() {
-//        List<Vehiculo> vehiculos = new ArrayList<>();
-//
-//        DataSource ds = MyDataSource.getMyOracleDataSource();
-//        String sql = "SELECT * FROM vehiculo";
-//        try (Connection con = ds.getConnection();
-//             Statement stmt = con.createStatement();
-//             ResultSet rs = stmt.executeQuery(sql)) {
-//
-//            Vehiculo vehiculo;
-//
-//            while (rs.next()) {
-//                vehiculo = new Vehiculo(rs.getString("matricula"), rs.getFloat("precioHora"),
-//                        rs.getString("marca"), rs.getString("descripcion"),
-//                        rs.getString("color"),rs.getInt("bateria"),
-//                        rs.getDate("fechaAdq"),rs.getString("estado"),rs.getInt("idCarnet"),
-//                        rs.getTimestamp("changeDts"),rs.getString("changeBy"));
-//                vehiculos.add(vehiculo);
-//            }
-//
-//        } catch (SQLException e) {
-//            e.printStackTrace();
-//        }
-//        return vehiculos;
-//    }
-//
-//    @Override
-//    public Result<Vehiculo> delete(String matricula) {
-//        DataSource ds= MyDataSource.getMyOracleDataSource();
-//        String sql = "DELETE FROM vehiculo WHERE matricucula like ?;";
-//
-//        try (Connection con = ds.getConnection();
-//            CallableStatement statement = con.prepareCall(sql);){
-//
-//            int pos =0;
-//            statement.setString(++pos,matricula);
-//
-//            ResultSet rs= statement.getResultSet();
-//            if (rs.next()){
-//                Vehiculo v = new Vehiculo(matricula, rs.getFloat("precioHora"),
-//                        rs.getString("marca"), rs.getString("descripcion"),
-//                        rs.getString("color"),rs.getInt("bateria"),
-//                        rs.getDate("fechaAdq"),rs.getString("estado"),rs.getInt("idCarnet"),
-//                        rs.getTimestamp("changeDts"),rs.getString("changeBy"));
-//                return new Result.Success<Vehiculo>(v);
-//            }
-//            return new Result.Error(400,"Ningun vehiculo eliminado");
-//        } catch (Exception e) {
-//            return new Result.Error(444,"Algun error capturado");
-//        }
-//    }
-//
-//    @Override
-//    public Result<Vehiculo> update(Vehiculo v) {
-//        DataSource ds= MyDataSource.getMyOracleDataSource();
-//        String sql ="UPDATE vehiculo set precioHora=?, marca=?, descripcion=?, color=?, bateria=?, fechaAdq=?, estado=?, idcCarnet=?,changeDts=current_timestamp,changeBy=server" +
-//                "where matricula like ?";
-//        try (Connection con = ds.getConnection();
-//            CallableStatement statement = con.prepareCall(sql);){
-//
-//            int pos = 0;
-//            statement.setString(++pos, v.getMatricula());
-//            statement.setFloat(++pos, v.getPrecioHora());
-//            statement.setString(++pos, v.getMarca());
-//            statement.setString(++pos, v.getDescripcion());
-//            statement.setString(++pos, v.getColor());
-//            statement.setInt(++pos, v.getBateria());
-//            statement.setDate(++pos, v.getFechaAdq());
-//            statement.setString(++pos, v.getEstado());
-//            statement.setFloat(++pos, v.getIdCarnet());
-//
-//            int cant = statement.executeUpdate();
-//            if (cant == 1)
-//                return new Result.Success<Vehiculo>(v);
-//            else
-//                return new Result.Error(401,"Ninguna vehiculo actualizada");
-//
-//        } catch (Exception e) {
-//            return new Result.Error(444,"Algun error capturado");
-//        }
-//    }
-//
-//    @Override
-//    public Result<Vehiculo> add(Vehiculo v) {
-//        DataSource ds= MyDataSource.getMyOracleDataSource();
-//        String sql ="INSERT INTO vehiculo values (?,?,?,?,?, ?,?,?,?,?,?)";
-//        try (Connection con = ds.getConnection();
-//             CallableStatement statement = con.prepareCall(sql);){
-//
-//            int pos = 0;
-//            statement.setString(++pos, v.getMatricula());
-//            statement.setFloat(++pos, v.getPrecioHora());
-//            statement.setString(++pos, v.getMarca());
-//            statement.setString(++pos, v.getDescripcion());
-//            statement.setString(++pos, v.getColor());
-//            statement.setInt(++pos, v.getBateria());
-//            statement.setDate(++pos, v.getFechaAdq());
-//            statement.setString(++pos, v.getEstado());
-//            statement.setFloat(++pos, v.getIdCarnet());
-//
-//            int cant = statement.executeUpdate();
-//            if (cant == 1)
-//                return new Result.Success<Vehiculo>(v);
-//            else
-//                return new Result.Error(401,"Ninguna vehiculo añadida");
-//
-//        } catch (Exception e) {
-//            return new Result.Error(444,"Algun error capturado");
-//        }
-//    }
-//
-//    @Override
-//    public Result<Vehiculo> get(String matricula) {
-//        return null;
-//    }
 
     /*COCHES*/
     @Override
-    public List<Vehiculo> getAllC() {
-        List<Vehiculo> vehiculos = new ArrayList<>();
+    public List<Coche> getAllC() {
+        List<Coche> vehiculos = new ArrayList<>();
 
         DataSource ds = MyDataSource.getMyOracleDataSource();
         String sql = "SELECT * FROM vehiculo v INNER JOIN coche c ON v.matricula=c.matricula";
@@ -161,7 +45,7 @@ public class ImpVehiculoService implements IVehiculoService{
     }
 
     @Override
-    public Result<Vehiculo> deleteC(String matricula) {
+    public Result<Coche> deleteC(String matricula) {
         DataSource ds= MyDataSource.getMyOracleDataSource();
         String sql = "DELETE FROM vehiculo v INNER JOIN coche c ON v.matricula=c.matricula WHERE matricula like ?;";
 
@@ -189,20 +73,49 @@ public class ImpVehiculoService implements IVehiculoService{
     }
 
     @Override
-    public Result<Vehiculo> updateC(Vehiculo v) {
-        return null;
+    public Result<Coche> addC(Coche v) {
+        DataSource ds= MyDataSource.getMyOracleDataSource();
+        String sql ="INSERT INTO vehiculo(matricula,preciohora,marca,descripcion,color,bateria,fechaadq,estado,idcarnet)" +
+                " values ("+v.getMatricula()+","+v.getPrecioHora()+","+ v.getMarca() +
+                ","+v.getDescripcion()+","+v.getColor()+","+ v.getBateria()+","+v.getFechaAdq()
+                +","+v.getEstado()+","+v.getIdCarnet()+");\n"+
+                "INSERT INTO coche values(" + v.getMatricula() + "," + v.getNumPlazas() + "," + v.getNumPuertas()+")";
+        try (Connection con = ds.getConnection();
+             CallableStatement statement = con.prepareCall(sql);){
+
+            int pos = 0;
+            statement.setString(++pos, v.getMatricula());
+            statement.setFloat(++pos, v.getPrecioHora());
+            statement.setString(++pos, v.getMarca());
+            statement.setString(++pos, v.getDescripcion());
+            statement.setString(++pos, v.getColor());
+            statement.setInt(++pos, v.getBateria());
+            statement.setDate(++pos, v.getFechaAdq());
+            statement.setString(++pos, v.getEstado());
+            statement.setFloat(++pos, v.getIdCarnet());
+            statement.setInt(++pos, v.getNumPlazas());
+            statement.setInt(++pos, v.getNumPuertas());
+
+            int cant = statement.executeUpdate();
+            if (cant == 1)
+                return new Result.Success<Vehiculo>(v);
+            else
+                return new Result.Error(401,"Ninguna vehiculo añadida");
+
+        } catch (Exception e) {
+            return new Result.Error(444,"Algun error capturado");
+        }
     }
 
     @Override
-    public Result<Vehiculo> addC(Vehiculo v) {
+    public Result<Coche> updateC(Coche c) {
         return null;
     }
-
 
     /*MOTO*/
     @Override
-    public List<Vehiculo> getAllM() {
-        List<Vehiculo> vehiculos = new ArrayList<>();
+    public List<Moto> getAllM() {
+        List<Moto> vehiculos = new ArrayList<>();
 
         DataSource ds = MyDataSource.getMyOracleDataSource();
         String sql = "SELECT * FROM vehiculo v INNER JOIN moto m ON v.matricula=m.matricula";
@@ -229,7 +142,7 @@ public class ImpVehiculoService implements IVehiculoService{
         return vehiculos;    }
 
     @Override
-    public Result<Vehiculo> deleteM(String matricula) {
+    public Result<Moto> deleteM(String matricula) {
         DataSource ds= MyDataSource.getMyOracleDataSource();
         String sql = "DELETE FROM vehiculo v INNER JOIN moto c ON v.matricula=c.matricula WHERE matricula like ?;";
 
@@ -257,20 +170,49 @@ public class ImpVehiculoService implements IVehiculoService{
     }
 
     @Override
-    public Result<Vehiculo> updateM(Vehiculo v) {
-        return null;
+    public Result<Moto> addM(Moto v) {
+        DataSource ds= MyDataSource.getMyOracleDataSource();
+        String sql ="INSERT INTO vehiculo(matricula,preciohora,marca,descripcion,color,bateria,fechaadq,estado,idcarnet)" +
+                " values ("+v.getMatricula()+","+v.getPrecioHora()+","+ v.getMarca() +
+                ","+v.getDescripcion()+","+v.getColor()+","+ v.getBateria()+","+v.getFechaAdq()
+                +","+v.getEstado()+","+v.getIdCarnet()+");\n"+
+                "INSERT INTO moto values(" + v.getMatricula() + "," + v.getVelocidadMax() + "," + v.getCilindrada()+")";
+        try (Connection con = ds.getConnection();
+             CallableStatement statement = con.prepareCall(sql);){
+
+            int pos = 0;
+            statement.setString(++pos, v.getMatricula());
+            statement.setFloat(++pos, v.getPrecioHora());
+            statement.setString(++pos, v.getMarca());
+            statement.setString(++pos, v.getDescripcion());
+            statement.setString(++pos, v.getColor());
+            statement.setInt(++pos, v.getBateria());
+            statement.setDate(++pos, v.getFechaAdq());
+            statement.setString(++pos, v.getEstado());
+            statement.setFloat(++pos, v.getIdCarnet());
+            statement.setInt(++pos, v.getVelocidadMax());
+            statement.setInt(++pos, v.getCilindrada());
+
+            int cant = statement.executeUpdate();
+            if (cant == 1)
+                return new Result.Success<Vehiculo>(v);
+            else
+                return new Result.Error(401,"Ninguna vehiculo añadida");
+
+        } catch (Exception e) {
+            return new Result.Error(444,"Algun error capturado");
+        }
     }
 
     @Override
-    public Result<Vehiculo> addM(Vehiculo v) {
+    public Result<Moto> updateM(Moto m) {
         return null;
     }
-
 
     /*BICICLETA*/
     @Override
-    public List<Vehiculo> getAllB() {
-        List<Vehiculo> vehiculos = new ArrayList<>();
+    public List<Bicicleta> getAllB() {
+        List<Bicicleta> vehiculos = new ArrayList<>();
 
         DataSource ds = MyDataSource.getMyOracleDataSource();
         String sql = "SELECT * FROM vehiculo v INNER JOIN bicicleta b ON v.matriucla=b.matricula";
@@ -296,7 +238,7 @@ public class ImpVehiculoService implements IVehiculoService{
         return vehiculos;    }
 
     @Override
-    public Result<Vehiculo> deleteB(String matricula) {
+    public Result<Bicicleta> deleteB(String matricula) {
         DataSource ds= MyDataSource.getMyOracleDataSource();
         String sql = "DELETE FROM vehiculo v INNER JOIN bicicleta c ON v.matricula=c.matricula WHERE matricula like ?;";
 
@@ -322,20 +264,48 @@ public class ImpVehiculoService implements IVehiculoService{
         }    }
 
     @Override
-    public Result<Vehiculo> updateB(Vehiculo v) {
-        return null;
+    public Result<Bicicleta> addB(Bicicleta v) {
+        DataSource ds= MyDataSource.getMyOracleDataSource();
+        String sql ="INSERT INTO vehiculo(matricula,preciohora,marca,descripcion,color,bateria,fechaadq,estado,idcarnet)" +
+                " values ("+v.getMatricula()+","+v.getPrecioHora()+","+ v.getMarca() +
+                ","+v.getDescripcion()+","+v.getColor()+","+ v.getBateria()+","+v.getFechaAdq()
+                +","+v.getEstado()+","+v.getIdCarnet()+");\n"+
+                "INSERT INTO coche values(" + v.getMatricula() + "," + v.getTipo() +")";
+        try (Connection con = ds.getConnection();
+             CallableStatement statement = con.prepareCall(sql);){
+
+            int pos = 0;
+            statement.setString(++pos, v.getMatricula());
+            statement.setFloat(++pos, v.getPrecioHora());
+            statement.setString(++pos, v.getMarca());
+            statement.setString(++pos, v.getDescripcion());
+            statement.setString(++pos, v.getColor());
+            statement.setInt(++pos, v.getBateria());
+            statement.setDate(++pos, v.getFechaAdq());
+            statement.setString(++pos, v.getEstado());
+            statement.setFloat(++pos, v.getIdCarnet());
+            statement.setString(++pos, v.getTipo());
+
+            int cant = statement.executeUpdate();
+            if (cant == 1)
+                return new Result.Success<Vehiculo>(v);
+            else
+                return new Result.Error(401,"Ninguna vehiculo añadida");
+
+        } catch (Exception e) {
+            return new Result.Error(444,"Algun error capturado");
+        }
     }
 
     @Override
-    public Result<Vehiculo> addB(Vehiculo v) {
+    public Result<Bicicleta> updateB(Bicicleta b) {
         return null;
     }
-
 
     /*PATINETE*/
     @Override
-    public List<Vehiculo> getAllP() {
-        List<Vehiculo> vehiculos = new ArrayList<>();
+    public List<Patinete> getAllP() {
+        List<Patinete> vehiculos = new ArrayList<>();
 
         DataSource ds = MyDataSource.getMyOracleDataSource();
         String sql = "SELECT * FROM vehiculo v INNER JOIN patienete p ON v.matricula=p.matricula";
@@ -363,7 +333,7 @@ public class ImpVehiculoService implements IVehiculoService{
     }
 
     @Override
-    public Result<Vehiculo> deleteP(String matricula) {
+    public Result<Patinete> deleteP(String matricula) {
         DataSource ds= MyDataSource.getMyOracleDataSource();
         String sql = "DELETE FROM vehiculo v INNER JOIN patinete c ON v.matricula=c.matricula WHERE matricula like ?;";
 
@@ -390,15 +360,47 @@ public class ImpVehiculoService implements IVehiculoService{
         }    }
 
     @Override
-    public Result<Vehiculo> updateP(Vehiculo v) {
-        return null;
+    public Result<Patinete> addP(Patinete v) {
+        DataSource ds= MyDataSource.getMyOracleDataSource();
+        String sql ="INSERT INTO vehiculo(matricula,preciohora,marca,descripcion,color,bateria,fechaadq,estado,idcarnet)" +
+                " values ("+v.getMatricula()+","+v.getPrecioHora()+","+ v.getMarca() +
+                ","+v.getDescripcion()+","+v.getColor()+","+ v.getBateria()+","+v.getFechaAdq()
+                +","+v.getEstado()+","+v.getIdCarnet()+");\n"+
+                "INSERT INTO coche values(" + v.getMatricula() + "," + v.getNumRuedas() + "," + v.getTamanyo()+")";
+        try (Connection con = ds.getConnection();
+             CallableStatement statement = con.prepareCall(sql);){
+
+            int pos = 0;
+            statement.setString(++pos, v.getMatricula());
+            statement.setFloat(++pos, v.getPrecioHora());
+            statement.setString(++pos, v.getMarca());
+            statement.setString(++pos, v.getDescripcion());
+            statement.setString(++pos, v.getColor());
+            statement.setInt(++pos, v.getBateria());
+            statement.setDate(++pos, v.getFechaAdq());
+            statement.setString(++pos, v.getEstado());
+            statement.setFloat(++pos, v.getIdCarnet());
+            statement.setInt(++pos, v.getNumRuedas());
+            statement.setInt(++pos, v.getTamanyo());
+
+            int cant = statement.executeUpdate();
+            if (cant == 1)
+                return new Result.Success<Vehiculo>(v);
+            else
+                return new Result.Error(401,"Ninguna vehiculo añadida");
+
+        } catch (Exception e) {
+            return new Result.Error(444,"Algun error capturado");
+        }
     }
 
     @Override
-    public Result<Vehiculo> addP(Vehiculo v) {
+    public Result<Patinete> updateP(Patinete p) {
         return null;
     }
 
+    //GETALL
+    /*
 //    @Override
 //    public List<Vehiculo> getAll() {
 //        List<Vehiculo> vehiculos = new ArrayList<>();
@@ -425,7 +427,9 @@ public class ImpVehiculoService implements IVehiculoService{
 //        }
 //        return vehiculos;
 //    }
-//
+//*/
+    //DELETE
+    /*
 //    @Override
 //    public Result<Vehiculo> delete(String matricula) {
 //        DataSource ds= MyDataSource.getMyOracleDataSource();
@@ -451,7 +455,9 @@ public class ImpVehiculoService implements IVehiculoService{
 //            return new Result.Error(444,"Algun error capturado");
 //        }
 //    }
-//
+//*/
+    //UPDATE
+    /*
 //    @Override
 //    public Result<Vehiculo> update(Vehiculo v) {
 //        DataSource ds= MyDataSource.getMyOracleDataSource();
@@ -481,7 +487,9 @@ public class ImpVehiculoService implements IVehiculoService{
 //            return new Result.Error(444,"Algun error capturado");
 //        }
 //    }
-//
+//*/
+    //ADD
+    /*
 //    @Override
 //    public Result<Vehiculo> add(Vehiculo v) {
 //        DataSource ds= MyDataSource.getMyOracleDataSource();
@@ -514,7 +522,7 @@ public class ImpVehiculoService implements IVehiculoService{
 //    @Override
 //    public Result<Vehiculo> get(String matricula) {
 //        return null;
-//    }
+//    }*/
 
 
 }

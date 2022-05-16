@@ -1,7 +1,7 @@
 package es.ieslavereda.server.model;
 
 import es.ieslavereda.model.Result;
-import es.ieslavereda.model.clases.vehiculos.Vehiculo;
+import es.ieslavereda.model.clases.vehiculos.*;
 
 import java.util.List;
 
@@ -13,27 +13,27 @@ public interface IVehiculoService {
 //    Result<Vehiculo> get(TipoVehiculo vehiculo,String matricula); //fa falta?
 
     /*COCHES*/
-    List<Vehiculo> getAllC();
-    Result<Vehiculo> deleteC(String matricula);
-    Result<Vehiculo> updateC(Vehiculo v);
-    Result<Vehiculo> addC(Vehiculo v);
+    List<Coche> getAllC();
+    Result<Coche> deleteC(String matricula);
+    Result<Coche> updateC(Coche c);
+    Result<Coche> addC(Coche c);
 
     /*MOTOS*/
-    List<Vehiculo> getAllM();
-    Result<Vehiculo> deleteM(String matricula);
-    Result<Vehiculo> updateM(Vehiculo v);
-    Result<Vehiculo> addM(Vehiculo v);
+    List<Moto> getAllM();
+    Result<Moto> deleteM(String matricula);
+    Result<Moto> updateM(Moto m);
+    Result<Moto> addM(Moto m);
 
     /*BICIS*/
-    List<Vehiculo> getAllB();
-    Result<Vehiculo> deleteB(String matricula);
-    Result<Vehiculo> updateB(Vehiculo v);
-    Result<Vehiculo> addB(Vehiculo v);
+    List<Bicicleta> getAllB();
+    Result<Bicicleta> deleteB(String matricula);
+    Result<Bicicleta> updateB(Bicicleta b);
+    Result<Bicicleta> addB(Bicicleta b);
 
     /*PATIN*/
-    List<Vehiculo> getAllP();
-    Result<Vehiculo> deleteP(String matricula);
-    Result<Vehiculo> updateP(Vehiculo v);
-    Result<Vehiculo> addP(Vehiculo v);
+    List<Patinete> getAllP();
+    Result<Patinete> deleteP(String matricula);
+    Result<Patinete> updateP(Patinete p);
+    Result<Patinete> addP(Patinete p);
 
 }

@@ -33,7 +33,17 @@ public class Vehiculo {
     public Vehiculo() {
     }
 
-
+    public Vehiculo(String matricula, float precioHora, String marca, String descripcion, String color, int bateria, Date fechaAdq, String estado, int idCarnet) {
+        this.matricula = matricula;
+        this.precioHora = precioHora;
+        this.marca = marca;
+        this.descripcion = descripcion;
+        this.color = color;
+        this.bateria = bateria;
+        this.fechaAdq = fechaAdq;
+        this.estado = estado;
+        this.idCarnet = idCarnet;
+    }
 
     public String getMatricula() {
         return matricula;

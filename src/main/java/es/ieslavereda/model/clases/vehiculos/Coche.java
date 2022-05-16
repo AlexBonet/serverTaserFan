@@ -13,6 +13,12 @@ public class Coche extends Vehiculo {
         this.numPuertas = numPuertas;
     }
 
+    public Coche(String matricula, float precioHora, String marca, String descripcion, String color, int bateria, Date fechaAdq, String estado, int idCarnet, int numPlazas, int numPuertas) {
+        super(matricula, precioHora, marca, descripcion, color, bateria, fechaAdq, estado, idCarnet);
+        this.numPlazas = numPlazas;
+        this.numPuertas = numPuertas;
+    }
+
     public Coche(int numPlazas, int numPuertas) {
         this.numPlazas = numPlazas;
         this.numPuertas = numPuertas;

@@ -14,7 +14,6 @@ import spark.Response;
 
 import java.util.List;
 
-//TODO get() getAll()
 public class EmpleadoController {
     static Logger logger = LoggerFactory.getLogger(EmpleadoController.class);
 
