@@ -12,7 +12,6 @@ import java.util.List;
 /**
  * Per ara crec que getALL y delete de tots está correcte
  */
-//TODO update
 public class ImpVehiculoService implements IVehiculoService {
 
     /*COCHES*/
@@ -108,12 +107,13 @@ public class ImpVehiculoService implements IVehiculoService {
     }
 
     @Override
-    public Result<Coche> updateC(Coche v) {//todo falta la altra tabla y añadir baix els atributos de la altra taula
+    public Result<Coche> updateC(Coche v) {
         DataSource ds = MyDataSource.getMyOracleDataSource();
         String sql = "UPDATE vehiculo set precioHora=" + v.getPrecioHora() + ", marca=" + v.getMarca() + ", descripcion=" + v.getDescripcion() +
                 " ,color=" + v.getColor() + ", bateria=" + v.getBateria() + " fechaAdq=" + v.getFechaAdq() + ", estado=" + v.getEstado() + ", " +
                 "idcCarnet=" + v.getIdCarnet() + ",changeDts=current_timestamp,changeBy=server" +
-                "where matricula like" + v.getMatricula() + ";";
+                "where matricula like" + v.getMatricula() + ";" +
+                "UPDATE coche set numplazas=" + v.getNumPlazas() + ", numPuertas=" + v.getNumPuertas() + "where matricula like" + v.getMatricula() + ";";
         try (Connection con = ds.getConnection();
              CallableStatement statement = con.prepareCall(sql)) {
 
@@ -127,6 +127,8 @@ public class ImpVehiculoService implements IVehiculoService {
             statement.setDate(++pos, v.getFechaAdq());
             statement.setString(++pos, v.getEstado());
             statement.setFloat(++pos, v.getIdCarnet());
+            statement.setInt(++pos, v.getNumPlazas());
+            statement.setInt(++pos, v.getNumPuertas());
 
             int cant = statement.executeUpdate();
             if (cant == 1)
@@ -235,7 +237,37 @@ public class ImpVehiculoService implements IVehiculoService {
 
     @Override
     public Result<Moto> updateM(Moto v) {
-        return null;
+        DataSource ds = MyDataSource.getMyOracleDataSource();
+        String sql = "UPDATE vehiculo set precioHora=" + v.getPrecioHora() + ", marca=" + v.getMarca() + ", descripcion=" + v.getDescripcion() +
+                " ,color=" + v.getColor() + ", bateria=" + v.getBateria() + " fechaAdq=" + v.getFechaAdq() + ", estado=" + v.getEstado() + ", " +
+                "idcCarnet=" + v.getIdCarnet() + ",changeDts=current_timestamp,changeBy=server" +
+                "where matricula like" + v.getMatricula() + ";" +
+                "UPDATE moto set numplazas=" + v.getVelocidadMax() + ", numPuertas=" + v.getCilindrada() + "where matricula like" + v.getMatricula() + ";";
+        try (Connection con = ds.getConnection();
+             CallableStatement statement = con.prepareCall(sql)) {
+
+            int pos = 0;
+            statement.setString(++pos, v.getMatricula());
+            statement.setFloat(++pos, v.getPrecioHora());
+            statement.setString(++pos, v.getMarca());
+            statement.setString(++pos, v.getDescripcion());
+            statement.setString(++pos, v.getColor());
+            statement.setInt(++pos, v.getBateria());
+            statement.setDate(++pos, v.getFechaAdq());
+            statement.setString(++pos, v.getEstado());
+            statement.setFloat(++pos, v.getIdCarnet());
+            statement.setInt(++pos, v.getVelocidadMax());
+            statement.setInt(++pos, v.getCilindrada());
+
+            int cant = statement.executeUpdate();
+            if (cant == 1)
+                return new Result.Success<Vehiculo>(v);
+            else
+                return new Result.Error(401, "Ninguna vehiculo actualizada");
+
+        } catch (Exception e) {
+            return new Result.Error(444, "Algun error capturado");
+        }
     }
 
     /*BICICLETA*/
@@ -301,7 +333,7 @@ public class ImpVehiculoService implements IVehiculoService {
                 " values (" + v.getMatricula() + "," + v.getPrecioHora() + "," + v.getMarca() +
                 "," + v.getDescripcion() + "," + v.getColor() + "," + v.getBateria() + "," + v.getFechaAdq()
                 + "," + v.getEstado() + "," + v.getIdCarnet() + ");\n" +
-                "INSERT INTO coche values(" + v.getMatricula() + "," + v.getTipo() + ")";
+                "INSERT INTO bicicleta values(" + v.getMatricula() + "," + v.getTipo() + ")";
         try (Connection con = ds.getConnection();
              CallableStatement statement = con.prepareCall(sql)) {
 
@@ -330,7 +362,37 @@ public class ImpVehiculoService implements IVehiculoService {
 
     @Override
     public Result<Bicicleta> updateB(Bicicleta v) {
-        return null;
+        DataSource ds = MyDataSource.getMyOracleDataSource();
+        String sql = "UPDATE vehiculo set precioHora=" + v.getPrecioHora() + ", marca=" + v.getMarca() + ", descripcion=" + v.getDescripcion() +
+                " ,color=" + v.getColor() + ", bateria=" + v.getBateria() + " fechaAdq=" + v.getFechaAdq() + ", estado=" + v.getEstado() + ", " +
+                "idcCarnet=" + v.getIdCarnet() + ",changeDts=current_timestamp,changeBy=server" +
+                "where matricula like" + v.getMatricula() + ";" +
+                "UPDATE bicicleta set numplazas=" + v.getTipo() + "where matricula like" + v.getMatricula() + ";";
+        try (Connection con = ds.getConnection();
+             CallableStatement statement = con.prepareCall(sql)) {
+
+            int pos = 0;
+            statement.setString(++pos, v.getMatricula());
+            statement.setFloat(++pos, v.getPrecioHora());
+            statement.setString(++pos, v.getMarca());
+            statement.setString(++pos, v.getDescripcion());
+            statement.setString(++pos, v.getColor());
+            statement.setInt(++pos, v.getBateria());
+            statement.setDate(++pos, v.getFechaAdq());
+            statement.setString(++pos, v.getEstado());
+            statement.setFloat(++pos, v.getIdCarnet());
+            statement.setString(++pos, v.getTipo());
+
+
+            int cant = statement.executeUpdate();
+            if (cant == 1)
+                return new Result.Success<Vehiculo>(v);
+            else
+                return new Result.Error(401, "Ninguna vehiculo actualizada");
+
+        } catch (Exception e) {
+            return new Result.Error(444, "Algun error capturado");
+        }
     }
 
     /*PATINETE*/
@@ -398,7 +460,7 @@ public class ImpVehiculoService implements IVehiculoService {
                 " values (" + v.getMatricula() + "," + v.getPrecioHora() + "," + v.getMarca() +
                 "," + v.getDescripcion() + "," + v.getColor() + "," + v.getBateria() + "," + v.getFechaAdq()
                 + "," + v.getEstado() + "," + v.getIdCarnet() + ");\n" +
-                "INSERT INTO coche values(" + v.getMatricula() + "," + v.getNumRuedas() + "," + v.getTamanyo() + ")";
+                "INSERT INTO patinete values(" + v.getMatricula() + "," + v.getNumRuedas() + "," + v.getTamanyo() + ")";
         try (Connection con = ds.getConnection();
              CallableStatement statement = con.prepareCall(sql)) {
 
@@ -428,7 +490,37 @@ public class ImpVehiculoService implements IVehiculoService {
 
     @Override
     public Result<Patinete> updateP(Patinete v) {
-        return null;
+        DataSource ds = MyDataSource.getMyOracleDataSource();
+        String sql = "UPDATE vehiculo set precioHora=" + v.getPrecioHora() + ", marca=" + v.getMarca() + ", descripcion=" + v.getDescripcion() +
+                " ,color=" + v.getColor() + ", bateria=" + v.getBateria() + " fechaAdq=" + v.getFechaAdq() + ", estado=" + v.getEstado() + ", " +
+                "idcCarnet=" + v.getIdCarnet() + ",changeDts=current_timestamp,changeBy=server" +
+                "where matricula like" + v.getMatricula() + ";" +
+                "UPDATE patinete set numplazas=" + v.getNumRuedas() + ", numPuertas=" + v.getTamanyo() + "where matricula like" + v.getMatricula() + ";";
+        try (Connection con = ds.getConnection();
+             CallableStatement statement = con.prepareCall(sql)) {
+
+            int pos = 0;
+            statement.setString(++pos, v.getMatricula());
+            statement.setFloat(++pos, v.getPrecioHora());
+            statement.setString(++pos, v.getMarca());
+            statement.setString(++pos, v.getDescripcion());
+            statement.setString(++pos, v.getColor());
+            statement.setInt(++pos, v.getBateria());
+            statement.setDate(++pos, v.getFechaAdq());
+            statement.setString(++pos, v.getEstado());
+            statement.setFloat(++pos, v.getIdCarnet());
+            statement.setInt(++pos, v.getNumRuedas());
+            statement.setInt(++pos, v.getTamanyo());
+
+            int cant = statement.executeUpdate();
+            if (cant == 1)
+                return new Result.Success<Vehiculo>(v);
+            else
+                return new Result.Error(401, "Ninguna vehiculo actualizada");
+
+        } catch (Exception e) {
+            return new Result.Error(444, "Algun error capturado");
+        }
     }
 
     //GETALL
