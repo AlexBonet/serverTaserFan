@@ -46,15 +46,13 @@ public class ImpEmpleadoService implements IEmpleadoService {
             PreparedStatement stmt = con.prepareStatement("select * from empleado where email like ? and ENCRYPT_PASWD.decrypt_val(password) like ?");){
 
             int pos = 0;
-            stmt.setString(++pos, ad.getIdentificador());
+            stmt.setString(++pos, ad.getEmail());
             stmt.setString(++pos, ad.getPassword());
             ResultSet rs = stmt.executeQuery();
             if(rs.next()){
                 e = new Empleado(rs.getInt("idEmpleado"), rs.getString("dni"),
                         rs.getString("nombre"), rs.getString("apellidos"),
-                        rs.getString("domicilio"),rs.getString("cp"),
-                        rs.getString("email"),rs.getDate("fechaNac"),
-                        rs.getString("cargo"));
+                        rs.getString("email"));
                 return new Result.Success<Empleado>(e);
             }else{
                 return new Result.Error(404, "Datos incorrectos");

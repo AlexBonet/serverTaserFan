@@ -1,20 +1,20 @@
 package es.ieslavereda.model;
 
 public class AuthenticateData {
-    private String identificador;
+    private String email;
     private String password;
 
     public AuthenticateData(String identificador, String password) {
-        this.identificador = identificador;
+        this.email = identificador;
         this.password = password;
     }
 
-    public String getIdentificador() {
-        return identificador;
+    public String getEmail() {
+        return email;
     }
 
-    public void setIdentificador(String identificador) {
-        this.identificador = identificador;
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public String getPassword() {

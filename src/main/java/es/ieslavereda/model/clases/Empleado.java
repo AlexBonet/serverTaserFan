@@ -46,8 +46,18 @@ public class Empleado {
         this.cargo = cargo;
     }
 
+    public Empleado(int idCliente, String dni, String nombre, String apellidos, String email) {
+        this.idCliente = idCliente;
+        this.dni = dni;
+        this.nombre = nombre;
+        this.apellidos = apellidos;
+        this.email = email;
+    }
+
     public Empleado() {
     }
+
+
 
     @Override
     public String toString() {
