@@ -38,7 +38,7 @@ public class ImpEmpleadoService implements IEmpleadoService {
         return empleados;
     }
 
-    @Override //TODO, dona error de datos incorrectos
+    @Override
     public Result<Empleado> auth(AuthenticateData ad) {
         DataSource ds = MyDataSource.getMyOracleDataSource();
         Empleado e = null;
