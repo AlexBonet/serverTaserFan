@@ -16,8 +16,11 @@ public class VehiculoController {
     static Logger logger = LoggerFactory.getLogger(VehiculoController.class);
 
     private static IVehiculoService service = new ImpVehiculoService();
-    private static JsonTransformer<Vehiculo> jsonTransformer = new JsonTransformer<>();
 
+    private static JsonTransformer<Bicicleta> jsonTransformerB = new JsonTransformer<>();
+    private static JsonTransformer<Coche> jsonTransformerC = new JsonTransformer<>();
+    private static JsonTransformer<Moto> jsonTransformerM = new JsonTransformer<>();
+    private static JsonTransformer<Patinete> jsonTransformerP = new JsonTransformer<>();
 
     /*Obtener*/
     public static List<Coche> getCoches(Request request, Response response) {
@@ -39,9 +42,9 @@ public class VehiculoController {
 
     /*Añadir*/
     public static Result<Coche> addCoche(Request request, Response response) {
-        logger.info("Añadiendo vehiculo... ");
+        logger.info("Añadiendo coche... ");
 
-        Coche x = (Coche) jsonTransformer.getObjet(request.body(), Vehiculo.class);
+        Coche x = jsonTransformerC.getObjet(request.body(), Coche.class);
         Result<Coche> result = service.addC(x);
 
         if(result instanceof Result.Success)
@@ -54,9 +57,9 @@ public class VehiculoController {
         return result;
     }
     public static Result<Moto> addMotos(Request request, Response response) {
-        logger.info("Añadiendo vehiculo... ");
+        logger.info("Añadiendo moto... ");
 
-        Moto x = (Moto) jsonTransformer.getObjet(request.body(), Vehiculo.class);
+        Moto x = jsonTransformerM.getObjet(request.body(), Moto.class);
         Result<Moto> result = service.addM(x);
 
         if(result instanceof Result.Success)
@@ -69,9 +72,9 @@ public class VehiculoController {
         return result;
     }
     public static Result<Bicicleta> addBicis(Request request, Response response) {
-        logger.info("Añadiendo vehiculo... ");
+        logger.info("Añadiendo bici... ");
 
-        Bicicleta x = (Bicicleta) jsonTransformer.getObjet(request.body(), Vehiculo.class);
+        Bicicleta x = jsonTransformerB.getObjet(request.body(), Bicicleta.class);
         Result<Bicicleta> result = service.addB(x);
 
         if(result instanceof Result.Success)
@@ -84,9 +87,9 @@ public class VehiculoController {
         return result;
     }
     public static Result<Patinete> addPatin(Request request, Response response) {
-        logger.info("Añadiendo vehiculo... ");
+        logger.info("Añadiendo patinete... ");
 
-        Patinete x = (Patinete) jsonTransformer.getObjet(request.body(), Vehiculo.class);
+        Patinete x = jsonTransformerP.getObjet(request.body(), Patinete.class);
         Result<Patinete> result = service.addP(x);
 
         if(result instanceof Result.Success)
@@ -121,7 +124,7 @@ public class VehiculoController {
     public static Result<Coche> updCoche(Request request, Response response) {
         logger.info("Actualizando vehiculo... ");
 
-        Coche x = (Coche) jsonTransformer.getObjet(request.body(), Vehiculo.class);
+        Coche x = jsonTransformerC.getObjet(request.body(), Coche.class);
         Result<Coche> result = service.updateC(x);
 
         if(result instanceof Result.Success)
@@ -136,7 +139,7 @@ public class VehiculoController {
     public static Result<Moto> updMotos(Request request, Response response) {
         logger.info("Actualizando vehiculo... ");
 
-        Moto x = (Moto) jsonTransformer.getObjet(request.body(), Vehiculo.class);
+        Moto x = jsonTransformerM.getObjet(request.body(), Moto.class);
         Result<Moto> result = service.updateM(x);
 
         if(result instanceof Result.Success)
@@ -151,7 +154,7 @@ public class VehiculoController {
     public static Result<Bicicleta> updBicis(Request request, Response response) {
         logger.info("Actualizando vehiculo... ");
 
-        Bicicleta x = (Bicicleta) jsonTransformer.getObjet(request.body(), Vehiculo.class);
+        Bicicleta x = jsonTransformerB.getObjet(request.body(), Bicicleta.class);
         Result<Bicicleta> result = service.updateB(x);
 
         if(result instanceof Result.Success)
@@ -166,7 +169,7 @@ public class VehiculoController {
     public static Result<Patinete> updPatin(Request request, Response response) {
         logger.info("Actualizando vehiculo... ");
 
-        Patinete x = (Patinete) jsonTransformer.getObjet(request.body(), Vehiculo.class);
+        Patinete x = jsonTransformerP.getObjet(request.body(), Patinete.class);
         Result<Patinete> result = service.updateP(x);
 
         if(result instanceof Result.Success)

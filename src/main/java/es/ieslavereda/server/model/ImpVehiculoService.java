@@ -10,7 +10,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Per ara crec que getALL y delete de tots está correcte
+ * Per ara crec que getALL de tots está correcte
+ * TODO ADD(de moment coche): Falta el parámetro IN o OUT en el índice:: 12
+ * TODO UPDATE (de moment coche): indice columna no valido
  */
 public class ImpVehiculoService implements IVehiculoService {
 
@@ -31,7 +33,7 @@ public class ImpVehiculoService implements IVehiculoService {
                         rs.getString("marca"), rs.getString("descripcion"),
                         rs.getString("color"), rs.getInt("bateria"),
                         rs.getDate("fechaAdq"), rs.getString("estado"), rs.getInt("idCarnet"),
-                        rs.getTimestamp("changeDts"), rs.getString("changeBy"),
+                        //rs.getTimestamp("changeDts"), rs.getString("changeBy"),
                         rs.getInt("numPlazas"), rs.getInt("numPuertas")
                 );
                 vehiculos.add(c);
@@ -74,26 +76,41 @@ public class ImpVehiculoService implements IVehiculoService {
     @Override
     public Result<Coche> addC(Coche v) {
         DataSource ds = MyDataSource.getMyOracleDataSource();
+//        String sql = "INSERT INTO vehiculo(matricula,preciohora,marca,descripcion,color,bateria,fechaadq,estado,idcarnet)" +
+//                " values (" + v.getMatricula() + "," + v.getPrecioHora() + "," + v.getMarca() +
+//                "," + v.getDescripcion() + "," + v.getColor() + "," + v.getBateria() + "," + v.getFechaAdq()
+//                + "," + v.getEstado() + "," + v.getIdCarnet() + ");\n" +
+//                "INSERT INTO coche values(" + v.getMatricula() + "," + v.getNumPlazas() + "," + v.getNumPuertas() + ")";
         String sql = "INSERT INTO vehiculo(matricula,preciohora,marca,descripcion,color,bateria,fechaadq,estado,idcarnet)" +
-                " values (" + v.getMatricula() + "," + v.getPrecioHora() + "," + v.getMarca() +
-                "," + v.getDescripcion() + "," + v.getColor() + "," + v.getBateria() + "," + v.getFechaAdq()
-                + "," + v.getEstado() + "," + v.getIdCarnet() + ");\n" +
-                "INSERT INTO coche values(" + v.getMatricula() + "," + v.getNumPlazas() + "," + v.getNumPuertas() + ")";
+                " values (?,?,?,?,?,?,?,?,?);\n" +
+                "INSERT INTO coche VALUES(?,?,?)";
         try (Connection con = ds.getConnection();
              CallableStatement statement = con.prepareCall(sql)) {
 
-            int pos = 0;
-            statement.setString(++pos, v.getMatricula());
-            statement.setFloat(++pos, v.getPrecioHora());
-            statement.setString(++pos, v.getMarca());
-            statement.setString(++pos, v.getDescripcion());
-            statement.setString(++pos, v.getColor());
-            statement.setInt(++pos, v.getBateria());
-            statement.setDate(++pos, v.getFechaAdq());
-            statement.setString(++pos, v.getEstado());
-            statement.setFloat(++pos, v.getIdCarnet());
-            statement.setInt(++pos, v.getNumPlazas());
-            statement.setInt(++pos, v.getNumPuertas());
+//            int pos = 0;
+//            statement.setString(++pos, v.getMatricula());
+//            statement.setFloat(++pos, v.getPrecioHora());
+//            statement.setString(++pos, v.getMarca());
+//            statement.setString(++pos, v.getDescripcion());
+//            statement.setString(++pos, v.getColor());
+//            statement.setInt(++pos, v.getBateria());
+//            statement.setDate(++pos, v.getFechaAdq());
+//            statement.setString(++pos, v.getEstado());
+//            statement.setFloat(++pos, v.getIdCarnet());
+//            statement.setInt(++pos, v.getNumPlazas());
+//            statement.setInt(++pos, v.getNumPuertas());
+
+            statement.setString(1, v.getMatricula());
+            statement.setFloat(2, v.getPrecioHora());
+            statement.setString(3, v.getMarca());
+            statement.setString(4, v.getDescripcion());
+            statement.setString(5, v.getColor());
+            statement.setInt(6, v.getBateria());
+            statement.setDate(7, v.getFechaAdq());
+            statement.setString(8, v.getEstado());
+            statement.setFloat(9, v.getIdCarnet());
+            statement.setInt(10, v.getNumPlazas());
+            statement.setInt(11, v.getNumPuertas());
 
             int cant = statement.executeUpdate();
             if (cant == 1)
@@ -102,7 +119,7 @@ public class ImpVehiculoService implements IVehiculoService {
                 return new Result.Error(401, "Ninguna vehiculo añadida");
 
         } catch (Exception e) {
-            return new Result.Error(444, "Algun error capturado");
+            return new Result.Error(444, "Algun error capturado: " + e.getMessage());
         }
     }
 
@@ -137,7 +154,7 @@ public class ImpVehiculoService implements IVehiculoService {
                 return new Result.Error(401, "Ninguna vehiculo actualizada");
 
         } catch (Exception e) {
-            return new Result.Error(444, "Algun error capturado");
+            return new Result.Error(444, "Algun error capturado: " + e.getMessage());
         }
     }
 
@@ -160,7 +177,7 @@ public class ImpVehiculoService implements IVehiculoService {
                         rs.getString("marca"), rs.getString("descripcion"),
                         rs.getString("color"), rs.getInt("bateria"),
                         rs.getDate("fechaAdq"), rs.getString("estado"), rs.getInt("idCarnet"),
-                        rs.getTimestamp("changeDts"), rs.getString("changeBy"),
+//                        rs.getTimestamp("changeDts"), rs.getString("changeBy"),
                         rs.getInt("velocidadMax"), rs.getInt("cilindrada")
                 );
                 vehiculos.add(vehiculo);
@@ -276,7 +293,7 @@ public class ImpVehiculoService implements IVehiculoService {
         List<Bicicleta> vehiculos = new ArrayList<>();
 
         DataSource ds = MyDataSource.getMyOracleDataSource();
-        String sql = "SELECT * FROM vehiculo v INNER JOIN bicicleta b ON v.matriucla=b.matricula";
+        String sql = "SELECT * FROM vehiculo v INNER JOIN bicicleta b ON v.matricula=b.matricula";
         try (Connection con = ds.getConnection();
              Statement stmt = con.createStatement();
              ResultSet rs = stmt.executeQuery(sql)) {
@@ -288,7 +305,8 @@ public class ImpVehiculoService implements IVehiculoService {
                         rs.getString("marca"), rs.getString("descripcion"),
                         rs.getString("color"), rs.getInt("bateria"),
                         rs.getDate("fechaAdq"), rs.getString("estado"), rs.getInt("idCarnet"),
-                        rs.getTimestamp("changeDts"), rs.getString("changeBy"), rs.getString("tipo")
+//                        rs.getTimestamp("changeDts"), rs.getString("changeBy"),
+                        rs.getString("tipo")
                 );
                 vehiculos.add(vehiculo);
             }
@@ -335,7 +353,7 @@ public class ImpVehiculoService implements IVehiculoService {
                 + "," + v.getEstado() + "," + v.getIdCarnet() + ");\n" +
                 "INSERT INTO bicicleta values(" + v.getMatricula() + "," + v.getTipo() + ")";
         try (Connection con = ds.getConnection();
-             CallableStatement statement = con.prepareCall(sql)) {
+             CallableStatement statement = con.prepareCall(sql)) {//lo que pides con callableStatment es que haga lo de abajo y no arriba??
 
             int pos = 0;
             statement.setString(++pos, v.getMatricula());
@@ -356,7 +374,7 @@ public class ImpVehiculoService implements IVehiculoService {
                 return new Result.Error(401, "Ninguna vehiculo añadida");
 
         } catch (Exception e) {
-            return new Result.Error(444, "Algun error capturado");
+            return new Result.Error(444, "Algun error capturado: " + e.getMessage());
         }
     }
 
@@ -401,7 +419,7 @@ public class ImpVehiculoService implements IVehiculoService {
         List<Patinete> vehiculos = new ArrayList<>();
 
         DataSource ds = MyDataSource.getMyOracleDataSource();
-        String sql = "SELECT * FROM vehiculo v INNER JOIN patienete p ON v.matricula=p.matricula";
+        String sql = "SELECT * FROM vehiculo v INNER JOIN patinete p ON v.matricula=p.matricula";
         try (Connection con = ds.getConnection();
              Statement stmt = con.createStatement();
              ResultSet rs = stmt.executeQuery(sql)) {
@@ -413,7 +431,7 @@ public class ImpVehiculoService implements IVehiculoService {
                         rs.getString("marca"), rs.getString("descripcion"),
                         rs.getString("color"), rs.getInt("bateria"),
                         rs.getDate("fechaAdq"), rs.getString("estado"), rs.getInt("idCarnet"),
-                        rs.getTimestamp("changeDts"), rs.getString("changeBy"),
+//                        rs.getTimestamp("changeDts"), rs.getString("changeBy"),
                         rs.getInt("numRuedas"), rs.getInt("tamanyo")
                 );
                 vehiculos.add(vehiculo);
@@ -449,7 +467,7 @@ public class ImpVehiculoService implements IVehiculoService {
             }
             return new Result.Error(400, "Ningun vehiculo eliminado");
         } catch (Exception e) {
-            return new Result.Error(444, "Algun error capturado");
+            return new Result.Error(444, "Algun error capturado en las bicis: " + e.getMessage());
         }
     }
 
