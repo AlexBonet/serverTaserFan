@@ -2,7 +2,6 @@ package es.ieslavereda.server.controler;
 
 import es.ieslavereda.model.AuthenticateData;
 import es.ieslavereda.model.Result;
-import es.ieslavereda.model.clases.Cliente;
 import es.ieslavereda.model.clases.Empleado;
 import es.ieslavereda.server.model.IEmpleadoService;
 import es.ieslavereda.server.model.ImpEmpleadoService;
