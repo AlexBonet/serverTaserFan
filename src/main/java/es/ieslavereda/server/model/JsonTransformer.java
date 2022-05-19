@@ -5,7 +5,7 @@ import com.google.gson.GsonBuilder;
 import spark.ResponseTransformer;
 
 public class JsonTransformer<T> implements ResponseTransformer {
-    private Gson gson = new GsonBuilder().setDateFormat("dd-MM-yyyy").create();
+    private Gson gson = new GsonBuilder().setDateFormat("dd/MM/yyyy").create();
 
     @Override
     public String render(Object model) {

@@ -10,39 +10,88 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Per ara crec que getALL de tots está correcte
+ * funciona: getALL, getC,getM,getP
+ * TODO getB arreglar
  * TODO ADD(de moment coche): Falta el parámetro IN o OUT en el índice:: 12
  * TODO UPDATE (de moment coche): indice columna no valido
  */
 public class ImpVehiculoService implements IVehiculoService {
 
-    /*COCHES*/
+    /*OBTENER TODOS LOS VEHICULOS*/
     @Override
-    public List<Coche> getAllC() {
-        List<Coche> vehiculos = new ArrayList<>();
+    public List<Vehiculo> getAll() {
+        List<Vehiculo> vehiculos = new ArrayList<>();
 
         DataSource ds = MyDataSource.getMyOracleDataSource();
-        String sql = "SELECT * FROM vehiculo v INNER JOIN coche c ON v.matricula=c.matricula";
-        try (Connection con = ds.getConnection();
-             Statement stmt = con.createStatement();
-             ResultSet rs = stmt.executeQuery(sql)) {
+        String sql = "SELECT * FROM vehiculo v ";
 
-            Coche c;
+        try (Connection con = ds.getConnection();
+             CallableStatement stmt = con.prepareCall(sql);
+             ResultSet rs = stmt.executeQuery()) {
+
+            Vehiculo v;
             while (rs.next()) {
-                c = new Coche(rs.getString("matricula"), rs.getFloat("precioHora"),
+                v = new Vehiculo(rs.getString("matricula"), rs.getFloat("precioHora"),
                         rs.getString("marca"), rs.getString("descripcion"),
                         rs.getString("color"), rs.getInt("bateria"),
-                        rs.getDate("fechaAdq"), rs.getString("estado"), rs.getInt("idCarnet"),
-                        //rs.getTimestamp("changeDts"), rs.getString("changeBy"),
-                        rs.getInt("numPlazas"), rs.getInt("numPuertas")
+                        rs.getDate("fechaAdq"), rs.getString("estado"), rs.getInt("idCarnet")
                 );
-                vehiculos.add(c);
+                vehiculos.add(v);
             }
 
         } catch (SQLException e) {
             e.printStackTrace();
         }
         return vehiculos;
+    }
+
+    /*COCHES*/
+    @Override
+    public Result<Coche> getC(String matricula) {
+        Coche c= null;
+        DataSource ds = MyDataSource.getMyOracleDataSource();
+        String sql = "{call GESTIONVEHICULOS.consultarCoche(?,?,?, ?,?,? ,?,?,? ,?,?)}";
+
+        try (Connection con = ds.getConnection();
+             CallableStatement stmt = con.prepareCall(sql)) {
+
+            stmt.setString(1,matricula);
+            stmt.registerOutParameter(2, Types.FLOAT);
+            stmt.registerOutParameter(3,Types.VARCHAR);
+            stmt.registerOutParameter(4, Types.VARCHAR);
+            stmt.registerOutParameter(5, Types.VARCHAR);
+            stmt.registerOutParameter(6, Types.INTEGER);
+            stmt.registerOutParameter(7, Types.DATE);
+            stmt.registerOutParameter(8, Types.VARCHAR);
+            stmt.registerOutParameter(9, Types.VARCHAR);
+            stmt.registerOutParameter(10, Types.INTEGER);
+            stmt.registerOutParameter(11, Types.INTEGER);
+
+            stmt.execute();
+
+            String v_matricula = matricula;
+            float v_precioHora = stmt.getFloat(2);
+            String v_marca = stmt.getString(3);
+            String v_descripcion = stmt.getString(4);
+            String v_color = stmt.getString(5);
+            int v_bateria = stmt.getInt(6);
+            Date date = stmt.getDate(7);
+            String v_estado = stmt.getString(8);
+            int v_idCarnet = stmt.getInt(9);
+            int v_numPlazas = stmt.getInt(10);
+            int v_numPuertas = stmt.getInt(11);
+
+            c = new Coche(v_matricula, v_precioHora, v_marca, v_descripcion, v_color, v_bateria, date, v_estado,v_idCarnet, v_numPlazas, v_numPuertas);
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return new Result.Error(402, "ALGUN ERROR CAPTURADO");
+        }
+        if(c != null){
+            return new Result.Success<Coche>(c);
+        }else{
+            return new Result.Error(404, "COCHE NO ENCONTRADO");
+        }
     }
 
     @Override
@@ -81,9 +130,11 @@ public class ImpVehiculoService implements IVehiculoService {
 //                "," + v.getDescripcion() + "," + v.getColor() + "," + v.getBateria() + "," + v.getFechaAdq()
 //                + "," + v.getEstado() + "," + v.getIdCarnet() + ");\n" +
 //                "INSERT INTO coche values(" + v.getMatricula() + "," + v.getNumPlazas() + "," + v.getNumPuertas() + ")";
-        String sql = "INSERT INTO vehiculo(matricula,preciohora,marca,descripcion,color,bateria,fechaadq,estado,idcarnet)" +
-                " values (?,?,?,?,?,?,?,?,?);\n" +
-                "INSERT INTO coche VALUES(?,?,?)";
+//        String sql = "INSERT INTO vehiculo(matricula,preciohora,marca,descripcion,color,bateria,fechaadq,estado,idcarnet)" +
+//                " values (?,?,?,?,?,?,?,?,?);\n" +
+//                "INSERT INTO coche VALUES(?,?,?)";
+        String sql = "{call GESTIONVEHICULOS.insertarCoche(?,?,? ,?,?,? ,?,?,? ,?,?)}";
+
         try (Connection con = ds.getConnection();
              CallableStatement statement = con.prepareCall(sql)) {
 
@@ -161,32 +212,51 @@ public class ImpVehiculoService implements IVehiculoService {
 
     /*MOTO*/
     @Override
-    public List<Moto> getAllM() {
-        List<Moto> vehiculos = new ArrayList<>();
-
+    public Result<Moto> getM(String matricula) {
+        Moto m = null;
         DataSource ds = MyDataSource.getMyOracleDataSource();
-        String sql = "SELECT * FROM vehiculo v INNER JOIN moto m ON v.matricula=m.matricula";
+        String sql = "{call GESTIONVEHICULOS.consultarMoto(?,?,?, ?,?,? ,?,?,? ,?,?)}";
+
         try (Connection con = ds.getConnection();
-             Statement stmt = con.createStatement();
-             ResultSet rs = stmt.executeQuery(sql)) {
+             CallableStatement stmt = con.prepareCall(sql)) {
 
-            Moto vehiculo;
+            stmt.setString(1,matricula);
+            stmt.registerOutParameter(2, Types.FLOAT);
+            stmt.registerOutParameter(3,Types.VARCHAR);
+            stmt.registerOutParameter(4, Types.VARCHAR);
+            stmt.registerOutParameter(5, Types.VARCHAR);
+            stmt.registerOutParameter(6, Types.INTEGER);
+            stmt.registerOutParameter(7, Types.DATE);
+            stmt.registerOutParameter(8, Types.VARCHAR);
+            stmt.registerOutParameter(9, Types.VARCHAR);
+            stmt.registerOutParameter(10, Types.INTEGER);
+            stmt.registerOutParameter(11, Types.INTEGER);
 
-            while (rs.next()) {
-                vehiculo = new Moto(rs.getString("matricula"), rs.getFloat("precioHora"),
-                        rs.getString("marca"), rs.getString("descripcion"),
-                        rs.getString("color"), rs.getInt("bateria"),
-                        rs.getDate("fechaAdq"), rs.getString("estado"), rs.getInt("idCarnet"),
-//                        rs.getTimestamp("changeDts"), rs.getString("changeBy"),
-                        rs.getInt("velocidadMax"), rs.getInt("cilindrada")
-                );
-                vehiculos.add(vehiculo);
-            }
+            stmt.execute();
+
+            String v_matricula = matricula;
+            float v_precioHora = stmt.getFloat(2);
+            String v_marca = stmt.getString(3);
+            String v_descripcion = stmt.getString(4);
+            String v_color = stmt.getString(5);
+            int v_bateria = stmt.getInt(6);
+            Date date = stmt.getDate(7);
+            String v_estado = stmt.getString(8);
+            int v_idCarnet = stmt.getInt(9);
+            int v_cilindrada = stmt.getInt(10);
+            int v_velMax = stmt.getInt(11);
+
+            m = new Moto(v_matricula, v_precioHora, v_marca, v_descripcion, v_color, v_bateria, date, v_estado,v_idCarnet, v_cilindrada, v_velMax);
 
         } catch (SQLException e) {
             e.printStackTrace();
+            return new Result.Error(402, "ALGUN ERROR CAPTURADO");
         }
-        return vehiculos;
+        if(m != null){
+            return new Result.Success<Moto>(m);
+        }else{
+            return new Result.Error(404, "MOTO NO ENCONTRADA");
+        }
     }
 
     @Override
@@ -289,32 +359,49 @@ public class ImpVehiculoService implements IVehiculoService {
 
     /*BICICLETA*/
     @Override
-    public List<Bicicleta> getAllB() {
-        List<Bicicleta> vehiculos = new ArrayList<>();
-
+    public Result<Bicicleta> getB(String matricula) {
+        Bicicleta b = null;
         DataSource ds = MyDataSource.getMyOracleDataSource();
-        String sql = "SELECT * FROM vehiculo v INNER JOIN bicicleta b ON v.matricula=b.matricula";
+        String sql = "{call GESTIONVEHICULOS.consultarBici(?,?,?, ?,?,? ,?,?,? ,?)}";
+
         try (Connection con = ds.getConnection();
-             Statement stmt = con.createStatement();
-             ResultSet rs = stmt.executeQuery(sql)) {
+            CallableStatement stmt = con.prepareCall(sql)) {
 
-            Bicicleta vehiculo;
+            stmt.setString(1,matricula);
+            stmt.registerOutParameter(2, Types.FLOAT);
+            stmt.registerOutParameter(3,Types.VARCHAR);
+            stmt.registerOutParameter(4, Types.VARCHAR);
+            stmt.registerOutParameter(5, Types.VARCHAR);
+            stmt.registerOutParameter(6, Types.FLOAT);
+            stmt.registerOutParameter(7, Types.DATE);
+            stmt.registerOutParameter(8, Types.VARCHAR);
+            stmt.registerOutParameter(9, Types.VARCHAR);
+            stmt.registerOutParameter(10, Types.VARCHAR);
 
-            while (rs.next()) {
-                vehiculo = new Bicicleta(rs.getString("matricula"), rs.getFloat("precioHora"),
-                        rs.getString("marca"), rs.getString("descripcion"),
-                        rs.getString("color"), rs.getInt("bateria"),
-                        rs.getDate("fechaAdq"), rs.getString("estado"), rs.getInt("idCarnet"),
-//                        rs.getTimestamp("changeDts"), rs.getString("changeBy"),
-                        rs.getString("tipo")
-                );
-                vehiculos.add(vehiculo);
-            }
+            stmt.execute();
+
+            String v_matricula = matricula;
+            float v_precioHora = stmt.getFloat(2);
+            String v_marca = stmt.getString(3);
+            String v_descripcion = stmt.getString(4);
+            String v_color = stmt.getString(5);
+            int v_bateria = stmt.getInt(6);
+            Date date = stmt.getDate(7);
+            String v_estado = stmt.getString(8);
+            int v_idCarnet = stmt.getInt(9);
+            String tipo = stmt.getString(10);
+
+            b = new Bicicleta(v_matricula, v_precioHora, v_marca, v_descripcion, v_color, v_bateria, date, v_estado,v_idCarnet, tipo);
 
         } catch (SQLException e) {
             e.printStackTrace();
+            return new Result.Error(402, "ALGUN ERROR CAPTURADO");
         }
-        return vehiculos;
+        if(b != null){
+            return new Result.Success<Bicicleta>(b);
+        }else{
+            return new Result.Error(404, "BICI NO ENCONTRADA");
+        }
     }
 
     @Override
@@ -415,32 +502,51 @@ public class ImpVehiculoService implements IVehiculoService {
 
     /*PATINETE*/
     @Override
-    public List<Patinete> getAllP() {
-        List<Patinete> vehiculos = new ArrayList<>();
-
+    public Result<Patinete> getP(String matricula) {
+        Patinete p = null;
         DataSource ds = MyDataSource.getMyOracleDataSource();
-        String sql = "SELECT * FROM vehiculo v INNER JOIN patinete p ON v.matricula=p.matricula";
+        String sql = "{call GESTIONVEHICULOS.consultarPatinete(?,?,?, ?,?,? ,?,?,? ,?,?)}";
+
         try (Connection con = ds.getConnection();
-             Statement stmt = con.createStatement();
-             ResultSet rs = stmt.executeQuery(sql)) {
+             CallableStatement stmt = con.prepareCall(sql)) {
 
-            Patinete vehiculo;
+            stmt.setString(1,matricula);
+            stmt.registerOutParameter(2, Types.FLOAT);
+            stmt.registerOutParameter(3,Types.VARCHAR);
+            stmt.registerOutParameter(4, Types.VARCHAR);
+            stmt.registerOutParameter(5, Types.VARCHAR);
+            stmt.registerOutParameter(6, Types.INTEGER);
+            stmt.registerOutParameter(7, Types.DATE);
+            stmt.registerOutParameter(8, Types.VARCHAR);
+            stmt.registerOutParameter(9, Types.VARCHAR);
+            stmt.registerOutParameter(10, Types.INTEGER);
+            stmt.registerOutParameter(11, Types.INTEGER);
 
-            while (rs.next()) {
-                vehiculo = new Patinete(rs.getString("matricula"), rs.getFloat("precioHora"),
-                        rs.getString("marca"), rs.getString("descripcion"),
-                        rs.getString("color"), rs.getInt("bateria"),
-                        rs.getDate("fechaAdq"), rs.getString("estado"), rs.getInt("idCarnet"),
-//                        rs.getTimestamp("changeDts"), rs.getString("changeBy"),
-                        rs.getInt("numRuedas"), rs.getInt("tamanyo")
-                );
-                vehiculos.add(vehiculo);
-            }
+            stmt.execute();
+
+            String v_matricula = matricula;
+            float v_precioHora = stmt.getFloat(2);
+            String v_marca = stmt.getString(3);
+            String v_descripcion = stmt.getString(4);
+            String v_color = stmt.getString(5);
+            int v_bateria = stmt.getInt(6);
+            Date date = stmt.getDate(7);
+            String v_estado = stmt.getString(8);
+            int v_idCarnet = stmt.getInt(9);
+            int v_numRuedas = stmt.getInt(10);
+            int v_tamanyo = stmt.getInt(11);
+
+            p = new Patinete(v_matricula, v_precioHora, v_marca, v_descripcion, v_color, v_bateria, date, v_estado,v_idCarnet, v_numRuedas, v_tamanyo);
 
         } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return vehiculos;
+                e.printStackTrace();
+                return new Result.Error(402, "ALGUN ERROR CAPTURADO");
+            }
+            if(p != null){
+                return new Result.Success<Patinete>(p);
+            }else{
+                return new Result.Error(404, "PATIN NO ENCONTRADA");
+            }
     }
 
     @Override
@@ -540,131 +646,5 @@ public class ImpVehiculoService implements IVehiculoService {
             return new Result.Error(444, "Algun error capturado");
         }
     }
-
-    //GETALL
-    /*
-//    @Override
-//    public List<Vehiculo> getAll() {
-//        List<Vehiculo> vehiculos = new ArrayList<>();
-//
-//        DataSource ds = MyDataSource.getMyOracleDataSource();
-//        String sql = "SELECT * FROM vehiculo";
-//        try (Connection con = ds.getConnection();
-//             Statement stmt = con.createStatement();
-//             ResultSet rs = stmt.executeQuery(sql)) {
-//
-//            Vehiculo vehiculo;
-//
-//            while (rs.next()) {
-//                vehiculo = new Vehiculo(rs.getString("matricula"), rs.getFloat("precioHora"),
-//                        rs.getString("marca"), rs.getString("descripcion"),
-//                        rs.getString("color"),rs.getInt("bateria"),
-//                        rs.getDate("fechaAdq"),rs.getString("estado"),rs.getInt("idCarnet"),
-//                        rs.getTimestamp("changeDts"),rs.getString("changeBy"));
-//                vehiculos.add(vehiculo);
-//            }
-//
-//        } catch (SQLException e) {
-//            e.printStackTrace();
-//        }
-//        return vehiculos;
-//    }
-//*/
-    //DELETE
-    /*
-//    @Override
-//    public Result<Vehiculo> delete(String matricula) {
-//        DataSource ds= MyDataSource.getMyOracleDataSource();
-//        String sql = "DELETE FROM vehiculo WHERE matricucula like ?;";//
-//
-//        try (Connection con = ds.getConnection();
-//            CallableStatement statement = con.prepareCall(sql);){
-//
-//            int pos =0;
-//            statement.setString(++pos,matricula);
-//
-//            ResultSet rs= statement.getResultSet();
-//            if (rs.next()){
-//                Vehiculo v = new Vehiculo(matricula, rs.getFloat("precioHora"),
-//                        rs.getString("marca"), rs.getString("descripcion"),
-//                        rs.getString("color"),rs.getInt("bateria"),
-//                        rs.getDate("fechaAdq"),rs.getString("estado"),rs.getInt("idCarnet"),
-//                        rs.getTimestamp("changeDts"),rs.getString("changeBy"));
-//                return new Result.Success<Vehiculo>(v);
-//            }
-//            return new Result.Error(400,"Ningun vehiculo eliminado");
-//        } catch (Exception e) {
-//            return new Result.Error(444,"Algun error capturado");
-//        }
-//    }
-//*/
-    //UPDATE
-    /*
-//    @Override
-//    public Result<Vehiculo> update(Vehiculo v) {
-//        DataSource ds= MyDataSource.getMyOracleDataSource();
-//        String sql ="UPDATE vehiculo set precioHora=?, marca=?, descripcion=?, color=?, bateria=?, fechaAdq=?, estado=?, idcCarnet=?,changeDts=current_timestamp,changeBy=server" +
-//                "where matricula like ?";
-//        try (Connection con = ds.getConnection();
-//            CallableStatement statement = con.prepareCall(sql);){
-//
-//            int pos = 0;
-//            statement.setString(++pos, v.getMatricula());
-//            statement.setFloat(++pos, v.getPrecioHora());
-//            statement.setString(++pos, v.getMarca());
-//            statement.setString(++pos, v.getDescripcion());
-//            statement.setString(++pos, v.getColor());
-//            statement.setInt(++pos, v.getBateria());
-//            statement.setDate(++pos, v.getFechaAdq());
-//            statement.setString(++pos, v.getEstado());
-//            statement.setFloat(++pos, v.getIdCarnet());
-//
-//            int cant = statement.executeUpdate();
-//            if (cant == 1)
-//                return new Result.Success<Vehiculo>(v);
-//            else
-//                return new Result.Error(401,"Ninguna vehiculo actualizada");
-//
-//        } catch (Exception e) {
-//            return new Result.Error(444,"Algun error capturado");
-//        }
-//    }
-//*/
-    //ADD
-    /*
-//    @Override
-//    public Result<Vehiculo> add(Vehiculo v) {
-//        DataSource ds= MyDataSource.getMyOracleDataSource();
-//        String sql ="INSERT INTO vehiculo values (?,?,?,?,?, ?,?,?,?,?,?)";
-//        try (Connection con = ds.getConnection();
-//             CallableStatement statement = con.prepareCall(sql);){
-//
-//            int pos = 0;
-//            statement.setString(++pos, v.getMatricula());
-//            statement.setFloat(++pos, v.getPrecioHora());
-//            statement.setString(++pos, v.getMarca());
-//            statement.setString(++pos, v.getDescripcion());
-//            statement.setString(++pos, v.getColor());
-//            statement.setInt(++pos, v.getBateria());
-//            statement.setDate(++pos, v.getFechaAdq());
-//            statement.setString(++pos, v.getEstado());
-//            statement.setFloat(++pos, v.getIdCarnet());
-//
-//            int cant = statement.executeUpdate();
-//            if (cant == 1)
-//                return new Result.Success<Vehiculo>(v);
-//            else
-//                return new Result.Error(401,"Ninguna vehiculo añadida");
-//
-//        } catch (Exception e) {
-//            return new Result.Error(444,"Algun error capturado");
-//        }
-//    }
-//
-//    @Override
-//    public Result<Vehiculo> get(String matricula) {
-//        return null;
-//    }*/
-
 
 }

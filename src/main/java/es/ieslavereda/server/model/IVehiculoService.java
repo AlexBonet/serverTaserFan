@@ -6,32 +6,32 @@ import es.ieslavereda.model.clases.vehiculos.*;
 import java.util.List;
 
 public interface IVehiculoService {
-//    List<Vehiculo> getAll(TipoVehiculo vehiculo);
+    List<Vehiculo> getAll();
 //    Result<Vehiculo> delete(TipoVehiculo vehiculo,String matricula);
 //    Result<Vehiculo> update(TipoVehiculo vehiculo,Vehiculo v);
 //    Result<Vehiculo> add(TipoVehiculo vehiculo,Vehiculo v);
 //    Result<Vehiculo> get(TipoVehiculo vehiculo,String matricula); //fa falta?
 
     /*COCHES*/
-    List<Coche> getAllC();
+    Result<Coche> getC(String matricula);
     Result<Coche> deleteC(String matricula);
     Result<Coche> updateC(Coche c);
     Result<Coche> addC(Coche c);
 
     /*MOTOS*/
-    List<Moto> getAllM();
+    Result<Moto> getM(String matricula);
     Result<Moto> deleteM(String matricula);
     Result<Moto> updateM(Moto m);
     Result<Moto> addM(Moto m);
 
     /*BICIS*/
-    List<Bicicleta> getAllB();
+    Result<Bicicleta> getB(String matricula);
     Result<Bicicleta> deleteB(String matricula);
     Result<Bicicleta> updateB(Bicicleta b);
     Result<Bicicleta> addB(Bicicleta b);
 
     /*PATIN*/
-    List<Patinete> getAllP();
+    Result<Patinete> getP(String matricula);
     Result<Patinete> deleteP(String matricula);
     Result<Patinete> updateP(Patinete p);
     Result<Patinete> addP(Patinete p);

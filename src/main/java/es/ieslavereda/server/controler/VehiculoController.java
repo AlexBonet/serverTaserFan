@@ -11,33 +11,39 @@ import spark.Request;
 import spark.Response;
 
 import java.util.List;
-
 public class VehiculoController {
     static Logger logger = LoggerFactory.getLogger(VehiculoController.class);
 
     private static IVehiculoService service = new ImpVehiculoService();
 
+    private static JsonTransformer<Vehiculo> jsonTransformer = new JsonTransformer<>();
     private static JsonTransformer<Bicicleta> jsonTransformerB = new JsonTransformer<>();
     private static JsonTransformer<Coche> jsonTransformerC = new JsonTransformer<>();
     private static JsonTransformer<Moto> jsonTransformerM = new JsonTransformer<>();
     private static JsonTransformer<Patinete> jsonTransformerP = new JsonTransformer<>();
 
+    public static List<Vehiculo> getAll(Request request, Response response) {
+        logger.info("Obteniendo vehiculos... ");
+        return service.getAll();
+    }
+
+
     /*Obtener*/
-    public static List<Coche> getCoches(Request request, Response response) {
-        logger.info("Obteniendo vehiculos... ");
-        return service.getAllC();
+    public static Result<Coche> getCoches(Request request, Response response) {
+        logger.info("Obteniedo coche... ");
+        return service.getC(request.queryParams("matricula"));
     }
-    public static List<Moto> getMotos(Request request, Response response) {
-        logger.info("Obteniendo vehiculos... ");
-        return service.getAllM();
+    public static Result<Moto> getMotos(Request request, Response response) {
+        logger.info("Obteniedo moto... ");
+        return service.getM(request.queryParams("matricula"));
     }
-    public static List<Bicicleta> getBicis(Request request, Response response) {
-        logger.info("Obteniendo vehiculos... ");
-        return service.getAllB();
+    public static Result<Bicicleta> getBicis(Request request, Response response) {
+        logger.info("Obteniedo bicicleta... ");
+        return service.getB(request.queryParams("matricula"));
     }
-    public static List<Patinete> getPatines(Request request, Response response) {
-        logger.info("Obteniendo vehiculos... ");
-        return service.getAllP();
+    public static Result<Patinete> getPatines(Request request, Response response) {
+        logger.info("Obteniedo patinete... ");
+        return service.getP(request.queryParams("matricula"));
     }
 
     /*Añadir*/

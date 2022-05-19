@@ -13,6 +13,9 @@ public class App {
         get(API.Routes.ALL_EMPLEADOS, EmpleadoController::getEmpleados, new JsonTransformer<>());
         get(API.Routes.GET_EMPLEADO, EmpleadoController::getEmpleado, new JsonTransformer<>());
 
+        //VEHICULOS
+        get(API.Routes.GETALL, VehiculoController::getAll, new JsonTransformer<>());
+
         //COCHE
         get(API.Routes.COCHE, VehiculoController::getCoches, new JsonTransformer<>());
         post(API.Routes.COCHE, VehiculoController::addCoche, new JsonTransformer<>());
