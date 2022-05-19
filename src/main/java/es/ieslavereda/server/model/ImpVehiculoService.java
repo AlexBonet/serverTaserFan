@@ -12,8 +12,10 @@ import java.util.List;
 /**
  * funciona: getALL, getC,getM,getP
  * TODO getB arreglar
- * TODO ADD(de moment coche): Falta el parámetro IN o OUT en el índice:: 12
+ * TODO ADD(de moment coche):{"message":"Algun error capturado: ORA-20222: FATAL ERROR CAPTURADO. ORA-01403: No se ha encontrado ningún
+ * dato\nORA-06512: en \"C##1DAMBONET.GESTIONVEHICULOS\", línea 33\nORA-06512: en línea 1\n","code":444}
  * TODO UPDATE (de moment coche): indice columna no valido
+ * TODO hasta que no añada no borre
  */
 public class ImpVehiculoService implements IVehiculoService {
 
@@ -125,15 +127,8 @@ public class ImpVehiculoService implements IVehiculoService {
     @Override
     public Result<Coche> addC(Coche v) {
         DataSource ds = MyDataSource.getMyOracleDataSource();
-//        String sql = "INSERT INTO vehiculo(matricula,preciohora,marca,descripcion,color,bateria,fechaadq,estado,idcarnet)" +
-//                " values (" + v.getMatricula() + "," + v.getPrecioHora() + "," + v.getMarca() +
-//                "," + v.getDescripcion() + "," + v.getColor() + "," + v.getBateria() + "," + v.getFechaAdq()
-//                + "," + v.getEstado() + "," + v.getIdCarnet() + ");\n" +
-//                "INSERT INTO coche values(" + v.getMatricula() + "," + v.getNumPlazas() + "," + v.getNumPuertas() + ")";
-//        String sql = "INSERT INTO vehiculo(matricula,preciohora,marca,descripcion,color,bateria,fechaadq,estado,idcarnet)" +
-//                " values (?,?,?,?,?,?,?,?,?);\n" +
-//                "INSERT INTO coche VALUES(?,?,?)";
         String sql = "{call GESTIONVEHICULOS.insertarCoche(?,?,? ,?,?,? ,?,?,? ,?,?)}";
+        boolean resultat=false;
 
         try (Connection con = ds.getConnection();
              CallableStatement statement = con.prepareCall(sql)) {
@@ -163,15 +158,16 @@ public class ImpVehiculoService implements IVehiculoService {
             statement.setInt(10, v.getNumPlazas());
             statement.setInt(11, v.getNumPuertas());
 
-            int cant = statement.executeUpdate();
-            if (cant == 1)
-                return new Result.Success<Vehiculo>(v);
-            else
-                return new Result.Error(401, "Ninguna vehiculo añadida");
+            resultat= statement.execute();
 
         } catch (Exception e) {
             return new Result.Error(444, "Algun error capturado: " + e.getMessage());
         }
+        if (resultat)
+            return new Result.Success<Vehiculo>(v);
+        else
+            return new Result.Error(401, "Ninguna vehiculo añadida");
+
     }
 
     @Override
