@@ -12,6 +12,7 @@ import java.util.List;
 /**
  * funciona: getALL, getC,getM,getP
  * TODO getB arreglar
+ * todo mirar que funcione tots el insertarvehiculos
  * TODO ADD(de moment coche):{"message":"Algun error capturado: ORA-20222: FATAL ERROR CAPTURADO. ORA-01403: No se ha encontrado ningún
  * dato\nORA-06512: en \"C##1DAMBONET.GESTIONVEHICULOS\", línea 33\nORA-06512: en línea 1\n","code":444}
  * TODO UPDATE (de moment coche): indice columna no valido
