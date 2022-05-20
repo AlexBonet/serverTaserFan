@@ -11,15 +11,12 @@ import java.util.List;
 
 /**
  * vehiculos: getALL=ok
- * coche: get=ok, add=ok, dlt=ok , upd=no data found
- * patin: get=ok, add=no data found , dlt=? , upd=?
- * motos: get=ok, add=? , dlt=? , udt=?
+ * coche: get=ok, add=ok , dlt=ok , upd=KO
+ * patin: get=ok, add=KO , dlt=? , upd=?
+ * motos: get=ok, add=KO  , dlt=? , udt=?
  * bicis=?
  *
- * TODO getB arreglar
- * TODO error : els add de Moto y patin van a la tabla de coches
- * todo mirar que funcione tots el insertarvehiculos
-
+ * TODO add patin y moto : ORA-01403: No se ha encontrado ningún dato
  * TODO UPDATE (de moment coche):  No se ha encontrado ningún dato (El error ORA-01403 significa básicamente que una consulta que debió devolver datos no devuelve ninguno.)
  */
 public class ImpVehiculoService implements IVehiculoService {
@@ -256,18 +253,17 @@ public class ImpVehiculoService implements IVehiculoService {
         try (Connection con = ds.getConnection();
              CallableStatement statement = con.prepareCall(sql)) {
 
-            int pos = 0;
-            statement.setString(++pos, v.getMatricula());
-            statement.setFloat(++pos, v.getPrecioHora());
-            statement.setString(++pos, v.getMarca());
-            statement.setString(++pos, v.getDescripcion());
-            statement.setString(++pos, v.getColor());
-            statement.setInt(++pos, v.getBateria());
-            statement.setDate(++pos, v.getFechaAdq());
-            statement.setString(++pos, v.getEstado());
-            statement.setString(++pos, v.getIdCarnet());
-            statement.setInt(++pos, v.getVelocidadMax());
-            statement.setInt(++pos, v.getCilindrada());
+            statement.setString(1, v.getMatricula());
+            statement.setFloat(2, v.getPrecioHora());
+            statement.setString(3, v.getMarca());
+            statement.setString(4, v.getDescripcion());
+            statement.setString(5, v.getColor());
+            statement.setInt(6, v.getBateria());
+            statement.setDate(7, v.getFechaAdq());
+            statement.setString(8, v.getEstado());
+            statement.setString(9, v.getIdCarnet());
+            statement.setInt(10, v.getVelocidadMax());
+            statement.setInt(11, v.getCilindrada());
 
             if (!statement.execute())
                 return new Result.Success<Moto>(v);
