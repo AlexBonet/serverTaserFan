@@ -10,13 +10,17 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * funciona: getALL, getC,getM,getP, addC, addM,
+ * vehiculos: getALL=ok
+ * coche: get=ok, add=ok, dlt=ok , upd=no data found
+ * patin: get=ok, add=no data found , dlt=? , upd=?
+ * motos: get=ok, add=? , dlt=? , udt=?
+ * bicis=?
+ *
  * TODO getB arreglar
+ * TODO error : els add de Moto y patin van a la tabla de coches
  * todo mirar que funcione tots el insertarvehiculos
- * TODO ADD(de moment coche):{"message":"Algun error capturado: ORA-20222: FATAL ERROR CAPTURADO. ORA-01403: No se ha encontrado ningún
- * dato\nORA-06512: en \"C##1DAMBONET.GESTIONVEHICULOS\", línea 33\nORA-06512: en línea 1\n","code":444}
- * TODO UPDATE (de moment coche): indice columna no valido
- * TODO hasta que no añada no borre
+
+ * TODO UPDATE (de moment coche):  No se ha encontrado ningún dato
  */
 public class ImpVehiculoService implements IVehiculoService {
 
@@ -88,8 +92,7 @@ public class ImpVehiculoService implements IVehiculoService {
 
         } catch (SQLException e) {
             e.printStackTrace();
-            return new Result.Error(402, "ALGUN ERROR CAPTURADO");
-        }
+            return new Result.Error(444, "ALGUN ERROR CAPTURADO: " + e.getMessage());        }
         if(c != null){
             return new Result.Success<Coche>(c);
         }else{
@@ -100,21 +103,20 @@ public class ImpVehiculoService implements IVehiculoService {
     @Override
     public Result<Coche> deleteC(String matricula) {
         DataSource ds = MyDataSource.getMyOracleDataSource();
-        String sql = "DELETE FROM vehiculo v INNER JOIN coche c ON v.matricula=c.matricula WHERE matricula like ?;";
+        String sql = "{call GESTIONVEHICULOS.borrarCoche(?)}";
 
         try (Connection con = ds.getConnection();
              CallableStatement statement = con.prepareCall(sql)) {
 
-
             statement.setString(1, matricula);
 
-            if (statement.execute())
+            if (!statement.execute())
                 return new Result.Success<>(200);
             else
-                return new Result.Error(401, "Ninguna vehiculo añadida");
+                return new Result.Error(401, "Ninguna vehiculo eliminado");
 
         } catch (Exception e) {
-            return new Result.Error(444, "Algun error capturado");
+            return new Result.Error(444, "ALGUN ERROR CAPTURADO: " + e.getMessage());
         }
     }
 
@@ -175,8 +177,7 @@ public class ImpVehiculoService implements IVehiculoService {
                 return new Result.Error(401, "Ninguna vehiculo actualizada");
 
         } catch (Exception e) {
-            return new Result.Error(444, "Algun error capturado: " + e.getMessage());
-        }
+            return new Result.Error(444, "ALGUN ERROR CAPTURADO: " + e.getMessage());        }
     }
 
 
@@ -220,8 +221,7 @@ public class ImpVehiculoService implements IVehiculoService {
 
         } catch (SQLException e) {
             e.printStackTrace();
-            return new Result.Error(402, "ALGUN ERROR CAPTURADO");
-        }
+            return new Result.Error(444, "ALGUN ERROR CAPTURADO: " + e.getMessage());        }
         if(m != null){
             return new Result.Success<Moto>(m);
         }else{
@@ -232,28 +232,20 @@ public class ImpVehiculoService implements IVehiculoService {
     @Override
     public Result<Moto> deleteM(String matricula) {
         DataSource ds = MyDataSource.getMyOracleDataSource();
-        String sql = "DELETE FROM vehiculo v INNER JOIN moto c ON v.matricula=c.matricula WHERE matricula like ?;";
+        String sql = "{call GESTIONVEHICULOS.borrarMoto(?)}";
 
         try (Connection con = ds.getConnection();
              CallableStatement statement = con.prepareCall(sql)) {
 
-            int pos = 0;
-            statement.setString(++pos, matricula);
+            statement.setString(1, matricula);
 
-            ResultSet rs = statement.getResultSet();
-            if (rs.next()) {
-                Moto v = new Moto(matricula, rs.getFloat("precioHora"),
-                        rs.getString("marca"), rs.getString("descripcion"),
-                        rs.getString("color"), rs.getInt("bateria"),
-                        rs.getDate("fechaAdq"), rs.getString("estado"), rs.getString("idCarnet"),
-                        rs.getTimestamp("changeDts"), rs.getString("changeBy"),
-                        rs.getInt("velocidadMax"), rs.getInt("cilindrada")
-                );
-                return new Result.Success<Vehiculo>(v);
-            }
-            return new Result.Error(400, "Ningun vehiculo eliminado");
+            if (!statement.execute())
+                return new Result.Success<>(200);
+            else
+                return new Result.Error(401, "Ninguna vehiculo eliminado");
+
         } catch (Exception e) {
-            return new Result.Error(444, "Algun error capturado");
+            return new Result.Error(444, "ALGUN ERROR CAPTURADO: " + e.getMessage());
         }
     }
 
@@ -284,8 +276,7 @@ public class ImpVehiculoService implements IVehiculoService {
                 return new Result.Error(401, "Ninguna vehiculo añadida");
 
         } catch (Exception e) {
-            return new Result.Error(444, "Algun error capturado: " + e.getMessage());
-        }
+            return new Result.Error(444, "ALGUN ERROR CAPTURADO: " + e.getMessage());        }
     }
 
     @Override
@@ -315,8 +306,7 @@ public class ImpVehiculoService implements IVehiculoService {
                 return new Result.Error(401, "Ninguna vehiculo actualizada");
 
         } catch (Exception e) {
-            return new Result.Error(444, "Algun error capturado" + e.getMessage());
-        }
+            return new Result.Error(444, "ALGUN ERROR CAPTURADO: " + e.getMessage());        }
     }
 
 
@@ -358,8 +348,7 @@ public class ImpVehiculoService implements IVehiculoService {
 
         } catch (SQLException e) {
             e.printStackTrace();
-            return new Result.Error(402, "ALGUN ERROR CAPTURADO");
-        }
+            return new Result.Error(444, "ALGUN ERROR CAPTURADO: " + e.getMessage());        }
         if(b != null){
             return new Result.Success<Bicicleta>(b);
         }else{
@@ -370,27 +359,20 @@ public class ImpVehiculoService implements IVehiculoService {
     @Override
     public Result<Bicicleta> deleteB(String matricula) {
         DataSource ds = MyDataSource.getMyOracleDataSource();
-        String sql = "DELETE FROM vehiculo v INNER JOIN bicicleta c ON v.matricula=c.matricula WHERE matricula like ?;";
+        String sql = "{call GESTIONVEHICULOS.borrarBici(?)}";
 
         try (Connection con = ds.getConnection();
              CallableStatement statement = con.prepareCall(sql)) {
 
-            int pos = 0;
-            statement.setString(++pos, matricula);
+            statement.setString(1, matricula);
 
-            ResultSet rs = statement.getResultSet();
-            if (rs.next()) {
-                Bicicleta v = new Bicicleta(matricula, rs.getFloat("precioHora"),
-                        rs.getString("marca"), rs.getString("descripcion"),
-                        rs.getString("color"), rs.getInt("bateria"),
-                        rs.getDate("fechaAdq"), rs.getString("estado"), rs.getString("idCarnet"),
-                        rs.getTimestamp("changeDts"), rs.getString("changeBy"), rs.getString("tipo")
-                );
-                return new Result.Success<Vehiculo>(v);
-            }
-            return new Result.Error(400, "Ningun vehiculo eliminado");
+            if (!statement.execute())
+                return new Result.Success<>(200);
+            else
+                return new Result.Error(401, "Ninguna vehiculo eliminado");
+
         } catch (Exception e) {
-            return new Result.Error(444, "Algun error capturado");
+            return new Result.Error(444, "ALGUN ERROR CAPTURADO: " + e.getMessage());
         }
     }
 
@@ -420,8 +402,7 @@ public class ImpVehiculoService implements IVehiculoService {
                 return new Result.Error(401, "Ninguna vehiculo añadida");
 
         } catch (Exception e) {
-            return new Result.Error(444, "Algun error capturado: " + e.getMessage());
-        }
+            return new Result.Error(444, "ALGUN ERROR CAPTURADO: " + e.getMessage());        }
     }
 
     @Override
@@ -451,8 +432,7 @@ public class ImpVehiculoService implements IVehiculoService {
                 return new Result.Error(401, "Ninguna vehiculo actualizada");
 
         } catch (Exception e) {
-            return new Result.Error(444, "Algun error capturado"+ e.getMessage());
-        }
+            return new Result.Error(444, "ALGUN ERROR CAPTURADO: " + e.getMessage());        }
     }
 
 
@@ -496,8 +476,7 @@ public class ImpVehiculoService implements IVehiculoService {
 
         } catch (SQLException e) {
                 e.printStackTrace();
-                return new Result.Error(402, "ALGUN ERROR CAPTURADO");
-            }
+            return new Result.Error(444, "ALGUN ERROR CAPTURADO: " + e.getMessage());            }
             if(p != null){
                 return new Result.Success<Patinete>(p);
             }else{
@@ -508,28 +487,20 @@ public class ImpVehiculoService implements IVehiculoService {
     @Override
     public Result<Patinete> deleteP(String matricula) {
         DataSource ds = MyDataSource.getMyOracleDataSource();
-        String sql = "DELETE FROM vehiculo v INNER JOIN patinete c ON v.matricula=c.matricula WHERE matricula like ?;";
+        String sql = "{call GESTIONVEHICULOS.borrarPatinete(?)}";
 
         try (Connection con = ds.getConnection();
              CallableStatement statement = con.prepareCall(sql)) {
 
-            int pos = 0;
-            statement.setString(++pos, matricula);
+            statement.setString(1, matricula);
 
-            ResultSet rs = statement.getResultSet();
-            if (rs.next()) {
-                Coche v = new Coche(matricula, rs.getFloat("precioHora"),
-                        rs.getString("marca"), rs.getString("descripcion"),
-                        rs.getString("color"), rs.getInt("bateria"),
-                        rs.getDate("fechaAdq"), rs.getString("estado"), rs.getString("idCarnet"),
-                        rs.getTimestamp("changeDts"), rs.getString("changeBy"),
-                        rs.getInt("numRuedas"), rs.getInt("tamanyo")
-                );
-                return new Result.Success<Vehiculo>(v);
-            }
-            return new Result.Error(400, "Ningun vehiculo eliminado");
+            if (!statement.execute())
+                return new Result.Success<>(200);
+            else
+                return new Result.Error(401, "Ninguna vehiculo eliminado");
+
         } catch (Exception e) {
-            return new Result.Error(444, "Algun error capturado en las bicis: " + e.getMessage());
+            return new Result.Error(444, "ALGUN ERROR CAPTURADO: " + e.getMessage());
         }
     }
 
@@ -560,8 +531,7 @@ public class ImpVehiculoService implements IVehiculoService {
                 return new Result.Error(401, "Ninguna vehiculo añadida");
 
         } catch (Exception e) {
-            return new Result.Error(444, "Algun error capturado: \n" + e.getMessage());
-        }
+            return new Result.Error(444, "ALGUN ERROR CAPTURADO: " + e.getMessage());        }
     }
 
     @Override
@@ -591,7 +561,7 @@ public class ImpVehiculoService implements IVehiculoService {
                 return new Result.Error(401, "Ninguna vehiculo actualizada");
 
         } catch (Exception e) {
-            return new Result.Error(444, "Algun error capturado" + e.getMessage());
+            return new Result.Error(444, "ALGUN ERROR CAPTURADO: " + e.getMessage());
         }
     }
 
