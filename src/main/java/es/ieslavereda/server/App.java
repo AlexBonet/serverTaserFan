@@ -17,25 +17,25 @@ public class App {
         get(API.Routes.GETALL, VehiculoController::getAll, new JsonTransformer<>());
 
         //COCHE
-        get(API.Routes.COCHE, VehiculoController::getCoches, new JsonTransformer<>());
+        get(API.Routes.COCHE, VehiculoController::getCoche, new JsonTransformer<>());
         post(API.Routes.COCHE, VehiculoController::addCoche, new JsonTransformer<>());
         delete(API.Routes.COCHE, VehiculoController::delCoche, new JsonTransformer<>());
         put(API.Routes.COCHE, VehiculoController::updCoche, new JsonTransformer<>());
 
         //MOTOS
-        get(API.Routes.MOTOS, VehiculoController::getMotos, new JsonTransformer<>());
+        get(API.Routes.MOTOS, VehiculoController::getMoto, new JsonTransformer<>());
         post(API.Routes.MOTOS, VehiculoController::addMotos, new JsonTransformer<>());
         delete(API.Routes.MOTOS, VehiculoController::delMotos, new JsonTransformer<>());
         put(API.Routes.MOTOS, VehiculoController::updMotos, new JsonTransformer<>());
 
         //PATIN
-        get(API.Routes.PATIN, VehiculoController::getPatines, new JsonTransformer<>());
+        get(API.Routes.PATIN, VehiculoController::getPatin, new JsonTransformer<>());
         post(API.Routes.PATIN, VehiculoController::addPatin, new JsonTransformer<>());
         delete(API.Routes.PATIN, VehiculoController::delPatin, new JsonTransformer<>());
         put(API.Routes.PATIN, VehiculoController::updPatin, new JsonTransformer<>());
 
         //BICIS
-        get(API.Routes.BICIS, VehiculoController::getBicis, new JsonTransformer<>());
+        get(API.Routes.BICIS, VehiculoController::getBici, new JsonTransformer<>());
         post(API.Routes.BICIS, VehiculoController::addBicis, new JsonTransformer<>());
         delete(API.Routes.BICIS, VehiculoController::delBicis, new JsonTransformer<>());
         put(API.Routes.BICIS, VehiculoController::updBicis, new JsonTransformer<>());

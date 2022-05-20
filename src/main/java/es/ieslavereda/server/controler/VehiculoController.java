@@ -22,31 +22,67 @@ public class VehiculoController {
     private static JsonTransformer<Moto> jsonTransformerM = new JsonTransformer<>();
     private static JsonTransformer<Patinete> jsonTransformerP = new JsonTransformer<>();
 
+    /**Obtener todos los vehiculos*/
     public static List<Vehiculo> getAll(Request request, Response response) {
         logger.info("Obteniendo vehiculos... ");
         return service.getAll();
     }
 
-
-    /*Obtener*/
-    public static Result<Coche> getCoches(Request request, Response response) {
+    /**Obtener*/
+    public static Result<Coche> getCoche(Request request, Response response) {
         logger.info("Obteniedo coche... ");
-        return service.getC(request.queryParams("matricula"));
+        Result<Coche> result = service.getC(request.queryParams("matricula"));
+
+        if(result instanceof Result.Success)
+            response.status(200);
+        else {
+            Result.Error error = (Result.Error)result;
+            response.status(error.getCode());
+        }
+
+        return result;
     }
-    public static Result<Moto> getMotos(Request request, Response response) {
+    public static Result<Moto> getMoto(Request request, Response response) {
         logger.info("Obteniedo moto... ");
-        return service.getM(request.queryParams("matricula"));
+        Result<Moto> result = service.getM(request.queryParams("matricula"));
+
+        if(result instanceof Result.Success)
+            response.status(200);
+        else {
+            Result.Error error = (Result.Error)result;
+            response.status(error.getCode());
+        }
+
+        return result;
     }
-    public static Result<Bicicleta> getBicis(Request request, Response response) {
+    public static Result<Bicicleta> getBici(Request request, Response response) {
         logger.info("Obteniedo bicicleta... ");
-        return service.getB(request.queryParams("matricula"));
+        Result<Bicicleta> result = service.getB(request.queryParams("matricula"));
+
+        if(result instanceof Result.Success)
+            response.status(200);
+        else {
+            Result.Error error = (Result.Error)result;
+            response.status(error.getCode());
+        }
+
+        return result;
     }
-    public static Result<Patinete> getPatines(Request request, Response response) {
+    public static Result<Patinete> getPatin(Request request, Response response) {
         logger.info("Obteniedo patinete... ");
-        return service.getP(request.queryParams("matricula"));
+        Result<Patinete> result = service.getP(request.queryParams("matricula"));
+
+        if(result instanceof Result.Success)
+            response.status(200);
+        else {
+            Result.Error error = (Result.Error)result;
+            response.status(error.getCode());
+        }
+
+        return result;
     }
 
-    /*Añadir*/
+    /**Añadir*/
     public static Result<Coche> addCoche(Request request, Response response) {
         logger.info("Añadiendo coche... ");
 
@@ -108,7 +144,7 @@ public class VehiculoController {
         return result;
     }
 
-    /*Eliminar*/
+    /**Eliminar*/
     public static Result<Coche> delCoche(Request request, Response response) {
         logger.info("Eliminando vehiculo... ");
         return service.deleteC(request.queryParams("matricula"));
@@ -126,7 +162,7 @@ public class VehiculoController {
         return service.deleteP(request.queryParams("matricula"));
     }
 
-    /*Actualizar*/
+    /**Actualizar*/
     public static Result<Coche> updCoche(Request request, Response response) {
         logger.info("Actualizando vehiculo... ");
 

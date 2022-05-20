@@ -20,7 +20,7 @@ import java.util.List;
  */
 public class ImpVehiculoService implements IVehiculoService {
 
-    /*OBTENER TODOS LOS VEHICULOS*/
+    /**OBTENER TODOS LOS VEHICULOS*/
     @Override
     public List<Vehiculo> getAll() {
         List<Vehiculo> vehiculos = new ArrayList<>();
@@ -48,7 +48,7 @@ public class ImpVehiculoService implements IVehiculoService {
         return vehiculos;
     }
 
-    /*COCHES*/
+    /**COCHES*/
     @Override
     public Result<Coche> getC(String matricula) {
         Coche c= null;
@@ -105,21 +105,14 @@ public class ImpVehiculoService implements IVehiculoService {
         try (Connection con = ds.getConnection();
              CallableStatement statement = con.prepareCall(sql)) {
 
-            int pos = 0;
-            statement.setString(++pos, matricula);
 
-            ResultSet rs = statement.getResultSet();
-            if (rs.next()) {
-                Coche v = new Coche(matricula, rs.getFloat("precioHora"),
-                        rs.getString("marca"), rs.getString("descripcion"),
-                        rs.getString("color"), rs.getInt("bateria"),
-                        rs.getDate("fechaAdq"), rs.getString("estado"), rs.getInt("idCarnet"),
-                        rs.getTimestamp("changeDts"), rs.getString("changeBy"),
-                        rs.getInt("numPlazas"), rs.getInt("numPuertas")
-                );
-                return new Result.Success<Vehiculo>(v);
-            }
-            return new Result.Error(400, "Ningun vehiculo eliminado");
+            statement.setString(1, matricula);
+
+            if (statement.execute())
+                return new Result.Success<>(200);
+            else
+                return new Result.Error(401, "Ninguna vehiculo añadida");
+
         } catch (Exception e) {
             return new Result.Error(444, "Algun error capturado");
         }
@@ -129,23 +122,9 @@ public class ImpVehiculoService implements IVehiculoService {
     public Result<Coche> addC(Coche v) {
         DataSource ds = MyDataSource.getMyOracleDataSource();
         String sql = "{call GESTIONVEHICULOS.insertarCoche(?,?,? ,?,?,? ,?,?,? ,?,?)}";
-        boolean resultat=false;
 
         try (Connection con = ds.getConnection();
              CallableStatement statement = con.prepareCall(sql)) {
-
-//            int pos = 0;
-//            statement.setString(++pos, v.getMatricula());
-//            statement.setFloat(++pos, v.getPrecioHora());
-//            statement.setString(++pos, v.getMarca());
-//            statement.setString(++pos, v.getDescripcion());
-//            statement.setString(++pos, v.getColor());
-//            statement.setInt(++pos, v.getBateria());
-//            statement.setDate(++pos, v.getFechaAdq());
-//            statement.setString(++pos, v.getEstado());
-//            statement.setFloat(++pos, v.getIdCarnet());
-//            statement.setInt(++pos, v.getNumPlazas());
-//            statement.setInt(++pos, v.getNumPuertas());
 
             statement.setString(1, v.getMatricula());
             statement.setFloat(2, v.getPrecioHora());
@@ -159,26 +138,26 @@ public class ImpVehiculoService implements IVehiculoService {
             statement.setInt(10, v.getNumPlazas());
             statement.setInt(11, v.getNumPuertas());
 
-            resultat= statement.execute();
+            if (statement.execute())
+                return new Result.Success<Coche>(v);
+            else
+                return new Result.Error(401, "Ninguna vehiculo añadida");
 
         } catch (Exception e) {
             return new Result.Error(444, "Algun error capturado: " + e.getMessage());
         }
-        if (resultat)
-            return new Result.Success<Vehiculo>(v);
-        else
-            return new Result.Error(401, "Ninguna vehiculo añadida");
-
     }
 
     @Override
     public Result<Coche> updateC(Coche v) {
         DataSource ds = MyDataSource.getMyOracleDataSource();
-        String sql = "UPDATE vehiculo set precioHora=" + v.getPrecioHora() + ", marca=" + v.getMarca() + ", descripcion=" + v.getDescripcion() +
-                " ,color=" + v.getColor() + ", bateria=" + v.getBateria() + " fechaAdq=" + v.getFechaAdq() + ", estado=" + v.getEstado() + ", " +
-                "idcCarnet=" + v.getIdCarnet() + ",changeDts=current_timestamp,changeBy=server" +
-                "where matricula like" + v.getMatricula() + ";" +
-                "UPDATE coche set numplazas=" + v.getNumPlazas() + ", numPuertas=" + v.getNumPuertas() + "where matricula like" + v.getMatricula() + ";";
+        String sql = "{call GESTIONVEHICULOS.actualizarCoche(?,?,?,?,?,?,?,?,?,?,?)}";
+
+//        String sql = "UPDATE vehiculo set precioHora=" + v.getPrecioHora() + ", marca=" + v.getMarca() + ", descripcion=" + v.getDescripcion() +
+//                " ,color=" + v.getColor() + ", bateria=" + v.getBateria() + " fechaAdq=" + v.getFechaAdq() + ", estado=" + v.getEstado() + ", " +
+//                "idcCarnet=" + v.getIdCarnet() + ",changeDts=current_timestamp,changeBy=server" +
+//                "where matricula like" + v.getMatricula() + ";" +
+//                "UPDATE coche set numplazas=" + v.getNumPlazas() + ", numPuertas=" + v.getNumPuertas() + "where matricula like" + v.getMatricula() + ";";
         try (Connection con = ds.getConnection();
              CallableStatement statement = con.prepareCall(sql)) {
 
@@ -195,9 +174,8 @@ public class ImpVehiculoService implements IVehiculoService {
             statement.setInt(++pos, v.getNumPlazas());
             statement.setInt(++pos, v.getNumPuertas());
 
-            int cant = statement.executeUpdate();
-            if (cant == 1)
-                return new Result.Success<Vehiculo>(v);
+            if (statement.execute())
+                return new Result.Success<Coche>(v);
             else
                 return new Result.Error(401, "Ninguna vehiculo actualizada");
 
@@ -207,7 +185,7 @@ public class ImpVehiculoService implements IVehiculoService {
     }
 
 
-    /*MOTO*/
+    /**MOTO*/
     @Override
     public Result<Moto> getM(String matricula) {
         Moto m = null;
@@ -354,7 +332,7 @@ public class ImpVehiculoService implements IVehiculoService {
         }
     }
 
-    /*BICICLETA*/
+    /**BICICLETA*/
     @Override
     public Result<Bicicleta> getB(String matricula) {
         Bicicleta b = null;
@@ -497,7 +475,7 @@ public class ImpVehiculoService implements IVehiculoService {
         }
     }
 
-    /*PATINETE*/
+    /**PATINETE*/
     @Override
     public Result<Patinete> getP(String matricula) {
         Patinete p = null;
