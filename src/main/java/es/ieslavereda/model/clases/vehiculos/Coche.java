@@ -7,13 +7,13 @@ public class Coche extends Vehiculo {
     private int numPlazas;
     private int numPuertas;
 
-    public Coche(String matricula, float precioHora, String marca, String descripcion, String color, int bateria, Date fechaAdq, String estado, int idCarnet, Timestamp changeDts, String changeBy, int numPlazas, int numPuertas) {
+    public Coche(String matricula, float precioHora, String marca, String descripcion, String color, int bateria, Date fechaAdq, String estado, String idCarnet, Timestamp changeDts, String changeBy, int numPlazas, int numPuertas) {
         super(matricula, precioHora, marca, descripcion, color, bateria, fechaAdq, estado, idCarnet, changeDts, changeBy);
         this.numPlazas = numPlazas;
         this.numPuertas = numPuertas;
     }
 
-    public Coche(String matricula, float precioHora, String marca, String descripcion, String color, int bateria, Date fechaAdq, String estado, int idCarnet, int numPlazas, int numPuertas) {
+    public Coche(String matricula, float precioHora, String marca, String descripcion, String color, int bateria, Date fechaAdq, String estado, String idCarnet, int numPlazas, int numPuertas) {
         super(matricula, precioHora, marca, descripcion, color, bateria, fechaAdq, estado, idCarnet);
         this.numPlazas = numPlazas;
         this.numPuertas = numPuertas;

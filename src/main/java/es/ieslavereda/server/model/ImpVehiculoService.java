@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * funciona: getALL, getC,getM,getP
+ * funciona: getALL, getC,getM,getP, addC, addM,
  * TODO getB arreglar
  * todo mirar que funcione tots el insertarvehiculos
  * TODO ADD(de moment coche):{"message":"Algun error capturado: ORA-20222: FATAL ERROR CAPTURADO. ORA-01403: No se ha encontrado ningún
@@ -37,7 +37,7 @@ public class ImpVehiculoService implements IVehiculoService {
                 v = new Vehiculo(rs.getString("matricula"), rs.getFloat("precioHora"),
                         rs.getString("marca"), rs.getString("descripcion"),
                         rs.getString("color"), rs.getInt("bateria"),
-                        rs.getDate("fechaAdq"), rs.getString("estado"), rs.getInt("idCarnet")
+                        rs.getDate("fechaAdq"), rs.getString("estado"), rs.getString("idCarnet")
                 );
                 vehiculos.add(v);
             }
@@ -80,7 +80,7 @@ public class ImpVehiculoService implements IVehiculoService {
             int v_bateria = stmt.getInt(6);
             Date date = stmt.getDate(7);
             String v_estado = stmt.getString(8);
-            int v_idCarnet = stmt.getInt(9);
+            String v_idCarnet = stmt.getString(9);
             int v_numPlazas = stmt.getInt(10);
             int v_numPuertas = stmt.getInt(11);
 
@@ -134,11 +134,11 @@ public class ImpVehiculoService implements IVehiculoService {
             statement.setInt(6, v.getBateria());
             statement.setDate(7, v.getFechaAdq());
             statement.setString(8, v.getEstado());
-            statement.setFloat(9, v.getIdCarnet());
+            statement.setString(9, v.getIdCarnet());
             statement.setInt(10, v.getNumPlazas());
             statement.setInt(11, v.getNumPuertas());
 
-            if (statement.execute())
+            if (!statement.execute())
                 return new Result.Success<Coche>(v);
             else
                 return new Result.Error(401, "Ninguna vehiculo añadida");
@@ -153,11 +153,6 @@ public class ImpVehiculoService implements IVehiculoService {
         DataSource ds = MyDataSource.getMyOracleDataSource();
         String sql = "{call GESTIONVEHICULOS.actualizarCoche(?,?,?,?,?,?,?,?,?,?,?)}";
 
-//        String sql = "UPDATE vehiculo set precioHora=" + v.getPrecioHora() + ", marca=" + v.getMarca() + ", descripcion=" + v.getDescripcion() +
-//                " ,color=" + v.getColor() + ", bateria=" + v.getBateria() + " fechaAdq=" + v.getFechaAdq() + ", estado=" + v.getEstado() + ", " +
-//                "idcCarnet=" + v.getIdCarnet() + ",changeDts=current_timestamp,changeBy=server" +
-//                "where matricula like" + v.getMatricula() + ";" +
-//                "UPDATE coche set numplazas=" + v.getNumPlazas() + ", numPuertas=" + v.getNumPuertas() + "where matricula like" + v.getMatricula() + ";";
         try (Connection con = ds.getConnection();
              CallableStatement statement = con.prepareCall(sql)) {
 
@@ -170,11 +165,11 @@ public class ImpVehiculoService implements IVehiculoService {
             statement.setInt(++pos, v.getBateria());
             statement.setDate(++pos, v.getFechaAdq());
             statement.setString(++pos, v.getEstado());
-            statement.setFloat(++pos, v.getIdCarnet());
+            statement.setString(++pos, v.getIdCarnet());
             statement.setInt(++pos, v.getNumPlazas());
             statement.setInt(++pos, v.getNumPuertas());
 
-            if (statement.execute())
+            if (!statement.execute())
                 return new Result.Success<Coche>(v);
             else
                 return new Result.Error(401, "Ninguna vehiculo actualizada");
@@ -217,7 +212,7 @@ public class ImpVehiculoService implements IVehiculoService {
             int v_bateria = stmt.getInt(6);
             Date date = stmt.getDate(7);
             String v_estado = stmt.getString(8);
-            int v_idCarnet = stmt.getInt(9);
+            String v_idCarnet = stmt.getString(9);
             int v_cilindrada = stmt.getInt(10);
             int v_velMax = stmt.getInt(11);
 
@@ -250,7 +245,7 @@ public class ImpVehiculoService implements IVehiculoService {
                 Moto v = new Moto(matricula, rs.getFloat("precioHora"),
                         rs.getString("marca"), rs.getString("descripcion"),
                         rs.getString("color"), rs.getInt("bateria"),
-                        rs.getDate("fechaAdq"), rs.getString("estado"), rs.getInt("idCarnet"),
+                        rs.getDate("fechaAdq"), rs.getString("estado"), rs.getString("idCarnet"),
                         rs.getTimestamp("changeDts"), rs.getString("changeBy"),
                         rs.getInt("velocidadMax"), rs.getInt("cilindrada")
                 );
@@ -265,11 +260,8 @@ public class ImpVehiculoService implements IVehiculoService {
     @Override
     public Result<Moto> addM(Moto v) {
         DataSource ds = MyDataSource.getMyOracleDataSource();
-        String sql = "INSERT INTO vehiculo(matricula,preciohora,marca,descripcion,color,bateria,fechaadq,estado,idcarnet)" +
-                " values (" + v.getMatricula() + "," + v.getPrecioHora() + "," + v.getMarca() +
-                "," + v.getDescripcion() + "," + v.getColor() + "," + v.getBateria() + "," + v.getFechaAdq()
-                + "," + v.getEstado() + "," + v.getIdCarnet() + ");\n" +
-                "INSERT INTO moto values(" + v.getMatricula() + "," + v.getVelocidadMax() + "," + v.getCilindrada() + ")";
+        String sql = "{call GESTIONVEHICULOS.insertarMoto(?,?,? ,?,?,? ,?,?,? ,?,?)}";
+
         try (Connection con = ds.getConnection();
              CallableStatement statement = con.prepareCall(sql)) {
 
@@ -282,29 +274,25 @@ public class ImpVehiculoService implements IVehiculoService {
             statement.setInt(++pos, v.getBateria());
             statement.setDate(++pos, v.getFechaAdq());
             statement.setString(++pos, v.getEstado());
-            statement.setFloat(++pos, v.getIdCarnet());
+            statement.setString(++pos, v.getIdCarnet());
             statement.setInt(++pos, v.getVelocidadMax());
             statement.setInt(++pos, v.getCilindrada());
 
-            int cant = statement.executeUpdate();
-            if (cant == 1)
-                return new Result.Success<Vehiculo>(v);
+            if (!statement.execute())
+                return new Result.Success<Moto>(v);
             else
                 return new Result.Error(401, "Ninguna vehiculo añadida");
 
         } catch (Exception e) {
-            return new Result.Error(444, "Algun error capturado");
+            return new Result.Error(444, "Algun error capturado: " + e.getMessage());
         }
     }
 
     @Override
     public Result<Moto> updateM(Moto v) {
         DataSource ds = MyDataSource.getMyOracleDataSource();
-        String sql = "UPDATE vehiculo set precioHora=" + v.getPrecioHora() + ", marca=" + v.getMarca() + ", descripcion=" + v.getDescripcion() +
-                " ,color=" + v.getColor() + ", bateria=" + v.getBateria() + " fechaAdq=" + v.getFechaAdq() + ", estado=" + v.getEstado() + ", " +
-                "idcCarnet=" + v.getIdCarnet() + ",changeDts=current_timestamp,changeBy=server" +
-                "where matricula like" + v.getMatricula() + ";" +
-                "UPDATE moto set numplazas=" + v.getVelocidadMax() + ", numPuertas=" + v.getCilindrada() + "where matricula like" + v.getMatricula() + ";";
+        String sql = "{call GESTIONVEHICULOS.actualizarMoto(?,?,?,?,?,?,?,?,?,?,?)}";
+
         try (Connection con = ds.getConnection();
              CallableStatement statement = con.prepareCall(sql)) {
 
@@ -317,20 +305,20 @@ public class ImpVehiculoService implements IVehiculoService {
             statement.setInt(++pos, v.getBateria());
             statement.setDate(++pos, v.getFechaAdq());
             statement.setString(++pos, v.getEstado());
-            statement.setFloat(++pos, v.getIdCarnet());
+            statement.setString(++pos, v.getIdCarnet());
             statement.setInt(++pos, v.getVelocidadMax());
             statement.setInt(++pos, v.getCilindrada());
 
-            int cant = statement.executeUpdate();
-            if (cant == 1)
-                return new Result.Success<Vehiculo>(v);
+            if (!statement.execute())
+                return new Result.Success<Moto>(v);
             else
                 return new Result.Error(401, "Ninguna vehiculo actualizada");
 
         } catch (Exception e) {
-            return new Result.Error(444, "Algun error capturado");
+            return new Result.Error(444, "Algun error capturado" + e.getMessage());
         }
     }
+
 
     /**BICICLETA*/
     @Override
@@ -363,7 +351,7 @@ public class ImpVehiculoService implements IVehiculoService {
             int v_bateria = stmt.getInt(6);
             Date date = stmt.getDate(7);
             String v_estado = stmt.getString(8);
-            int v_idCarnet = stmt.getInt(9);
+            String v_idCarnet = stmt.getString(9);
             String tipo = stmt.getString(10);
 
             b = new Bicicleta(v_matricula, v_precioHora, v_marca, v_descripcion, v_color, v_bateria, date, v_estado,v_idCarnet, tipo);
@@ -395,7 +383,7 @@ public class ImpVehiculoService implements IVehiculoService {
                 Bicicleta v = new Bicicleta(matricula, rs.getFloat("precioHora"),
                         rs.getString("marca"), rs.getString("descripcion"),
                         rs.getString("color"), rs.getInt("bateria"),
-                        rs.getDate("fechaAdq"), rs.getString("estado"), rs.getInt("idCarnet"),
+                        rs.getDate("fechaAdq"), rs.getString("estado"), rs.getString("idCarnet"),
                         rs.getTimestamp("changeDts"), rs.getString("changeBy"), rs.getString("tipo")
                 );
                 return new Result.Success<Vehiculo>(v);
@@ -409,11 +397,8 @@ public class ImpVehiculoService implements IVehiculoService {
     @Override
     public Result<Bicicleta> addB(Bicicleta v) {
         DataSource ds = MyDataSource.getMyOracleDataSource();
-        String sql = "INSERT INTO vehiculo(matricula,preciohora,marca,descripcion,color,bateria,fechaadq,estado,idcarnet)" +
-                " values (" + v.getMatricula() + "," + v.getPrecioHora() + "," + v.getMarca() +
-                "," + v.getDescripcion() + "," + v.getColor() + "," + v.getBateria() + "," + v.getFechaAdq()
-                + "," + v.getEstado() + "," + v.getIdCarnet() + ");\n" +
-                "INSERT INTO bicicleta values(" + v.getMatricula() + "," + v.getTipo() + ")";
+        String sql = "{call GESTIONVEHICULOS.insertarBici(?,?,? ,?,?,? ,?,?,? ,?)}";
+
         try (Connection con = ds.getConnection();
              CallableStatement statement = con.prepareCall(sql)) {//lo que pides con callableStatment es que haga lo de abajo y no arriba??
 
@@ -426,12 +411,11 @@ public class ImpVehiculoService implements IVehiculoService {
             statement.setInt(++pos, v.getBateria());
             statement.setDate(++pos, v.getFechaAdq());
             statement.setString(++pos, v.getEstado());
-            statement.setFloat(++pos, v.getIdCarnet());
+            statement.setString(++pos, v.getIdCarnet());
             statement.setString(++pos, v.getTipo());
 
-            int cant = statement.executeUpdate();
-            if (cant == 1)
-                return new Result.Success<Vehiculo>(v);
+            if (!statement.execute())
+                return new Result.Success<Bicicleta>(v);
             else
                 return new Result.Error(401, "Ninguna vehiculo añadida");
 
@@ -443,11 +427,8 @@ public class ImpVehiculoService implements IVehiculoService {
     @Override
     public Result<Bicicleta> updateB(Bicicleta v) {
         DataSource ds = MyDataSource.getMyOracleDataSource();
-        String sql = "UPDATE vehiculo set precioHora=" + v.getPrecioHora() + ", marca=" + v.getMarca() + ", descripcion=" + v.getDescripcion() +
-                " ,color=" + v.getColor() + ", bateria=" + v.getBateria() + " fechaAdq=" + v.getFechaAdq() + ", estado=" + v.getEstado() + ", " +
-                "idcCarnet=" + v.getIdCarnet() + ",changeDts=current_timestamp,changeBy=server" +
-                "where matricula like" + v.getMatricula() + ";" +
-                "UPDATE bicicleta set numplazas=" + v.getTipo() + "where matricula like" + v.getMatricula() + ";";
+        String sql = "{call GESTIONVEHICULOS.actualizarBici(?,?,?,?,?,?,?,?,?,?,?)}";
+
         try (Connection con = ds.getConnection();
              CallableStatement statement = con.prepareCall(sql)) {
 
@@ -460,20 +441,20 @@ public class ImpVehiculoService implements IVehiculoService {
             statement.setInt(++pos, v.getBateria());
             statement.setDate(++pos, v.getFechaAdq());
             statement.setString(++pos, v.getEstado());
-            statement.setFloat(++pos, v.getIdCarnet());
+            statement.setString(++pos, v.getIdCarnet());
             statement.setString(++pos, v.getTipo());
 
 
-            int cant = statement.executeUpdate();
-            if (cant == 1)
-                return new Result.Success<Vehiculo>(v);
+            if (!statement.execute())
+                return new Result.Success<Bicicleta>(v);
             else
                 return new Result.Error(401, "Ninguna vehiculo actualizada");
 
         } catch (Exception e) {
-            return new Result.Error(444, "Algun error capturado");
+            return new Result.Error(444, "Algun error capturado"+ e.getMessage());
         }
     }
+
 
     /**PATINETE*/
     @Override
@@ -507,7 +488,7 @@ public class ImpVehiculoService implements IVehiculoService {
             int v_bateria = stmt.getInt(6);
             Date date = stmt.getDate(7);
             String v_estado = stmt.getString(8);
-            int v_idCarnet = stmt.getInt(9);
+            String v_idCarnet = stmt.getString(9);
             int v_numRuedas = stmt.getInt(10);
             int v_tamanyo = stmt.getInt(11);
 
@@ -540,7 +521,7 @@ public class ImpVehiculoService implements IVehiculoService {
                 Coche v = new Coche(matricula, rs.getFloat("precioHora"),
                         rs.getString("marca"), rs.getString("descripcion"),
                         rs.getString("color"), rs.getInt("bateria"),
-                        rs.getDate("fechaAdq"), rs.getString("estado"), rs.getInt("idCarnet"),
+                        rs.getDate("fechaAdq"), rs.getString("estado"), rs.getString("idCarnet"),
                         rs.getTimestamp("changeDts"), rs.getString("changeBy"),
                         rs.getInt("numRuedas"), rs.getInt("tamanyo")
                 );
@@ -553,13 +534,10 @@ public class ImpVehiculoService implements IVehiculoService {
     }
 
     @Override
-    public Result<Patinete> addP(Patinete v) {
+    public Result<Patinete> addP(Patinete v) {// todo - error
         DataSource ds = MyDataSource.getMyOracleDataSource();
-        String sql = "INSERT INTO vehiculo(matricula,preciohora,marca,descripcion,color,bateria,fechaadq,estado,idcarnet)" +
-                " values (" + v.getMatricula() + "," + v.getPrecioHora() + "," + v.getMarca() +
-                "," + v.getDescripcion() + "," + v.getColor() + "," + v.getBateria() + "," + v.getFechaAdq()
-                + "," + v.getEstado() + "," + v.getIdCarnet() + ");\n" +
-                "INSERT INTO patinete values(" + v.getMatricula() + "," + v.getNumRuedas() + "," + v.getTamanyo() + ")";
+        String sql = "{call GESTIONVEHICULOS.insertarPatinete(?,?,? ,?,?,? ,?,?,? ,?,?)}";
+
         try (Connection con = ds.getConnection();
              CallableStatement statement = con.prepareCall(sql)) {
 
@@ -572,29 +550,25 @@ public class ImpVehiculoService implements IVehiculoService {
             statement.setInt(++pos, v.getBateria());
             statement.setDate(++pos, v.getFechaAdq());
             statement.setString(++pos, v.getEstado());
-            statement.setFloat(++pos, v.getIdCarnet());
+            statement.setString(++pos, v.getIdCarnet());
             statement.setInt(++pos, v.getNumRuedas());
             statement.setInt(++pos, v.getTamanyo());
 
-            int cant = statement.executeUpdate();
-            if (cant == 1)
-                return new Result.Success<Vehiculo>(v);
+            if (!statement.execute())
+                return new Result.Success<Patinete>(v);
             else
                 return new Result.Error(401, "Ninguna vehiculo añadida");
 
         } catch (Exception e) {
-            return new Result.Error(444, "Algun error capturado");
+            return new Result.Error(444, "Algun error capturado: \n" + e.getMessage());
         }
     }
 
     @Override
     public Result<Patinete> updateP(Patinete v) {
         DataSource ds = MyDataSource.getMyOracleDataSource();
-        String sql = "UPDATE vehiculo set precioHora=" + v.getPrecioHora() + ", marca=" + v.getMarca() + ", descripcion=" + v.getDescripcion() +
-                " ,color=" + v.getColor() + ", bateria=" + v.getBateria() + " fechaAdq=" + v.getFechaAdq() + ", estado=" + v.getEstado() + ", " +
-                "idcCarnet=" + v.getIdCarnet() + ",changeDts=current_timestamp,changeBy=server" +
-                "where matricula like" + v.getMatricula() + ";" +
-                "UPDATE patinete set numplazas=" + v.getNumRuedas() + ", numPuertas=" + v.getTamanyo() + "where matricula like" + v.getMatricula() + ";";
+        String sql = "{call GESTIONVEHICULOS.actualizarPatinete(?,?,?,?,?,?,?,?,?,?,?)}";
+
         try (Connection con = ds.getConnection();
              CallableStatement statement = con.prepareCall(sql)) {
 
@@ -607,18 +581,17 @@ public class ImpVehiculoService implements IVehiculoService {
             statement.setInt(++pos, v.getBateria());
             statement.setDate(++pos, v.getFechaAdq());
             statement.setString(++pos, v.getEstado());
-            statement.setFloat(++pos, v.getIdCarnet());
+            statement.setString(++pos, v.getIdCarnet());
             statement.setInt(++pos, v.getNumRuedas());
             statement.setInt(++pos, v.getTamanyo());
 
-            int cant = statement.executeUpdate();
-            if (cant == 1)
-                return new Result.Success<Vehiculo>(v);
+            if (!statement.execute())
+                return new Result.Success<Patinete>(v);
             else
                 return new Result.Error(401, "Ninguna vehiculo actualizada");
 
         } catch (Exception e) {
-            return new Result.Error(444, "Algun error capturado");
+            return new Result.Error(444, "Algun error capturado" + e.getMessage());
         }
     }
 

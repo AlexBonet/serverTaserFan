@@ -146,25 +146,25 @@ public class VehiculoController {
 
     /**Eliminar*/
     public static Result<Coche> delCoche(Request request, Response response) {
-        logger.info("Eliminando vehiculo... ");
+        logger.info("Eliminando coche... ");
         return service.deleteC(request.queryParams("matricula"));
     }
     public static Result<Moto> delMotos(Request request, Response response) {
-        logger.info("Eliminando vehiculo... ");
+        logger.info("Eliminando moto... ");
         return service.deleteM(request.queryParams("matricula"));
     }
     public static Result<Bicicleta> delBicis(Request request, Response response) {
-        logger.info("Eliminando vehiculo... ");
+        logger.info("Eliminando bicicleta... ");
         return service.deleteB(request.queryParams("matricula"));
     }
     public static Result<Patinete> delPatin(Request request, Response response) {
-        logger.info("Eliminando vehiculo... ");
+        logger.info("Eliminando patinete... ");
         return service.deleteP(request.queryParams("matricula"));
     }
 
     /**Actualizar*/
     public static Result<Coche> updCoche(Request request, Response response) {
-        logger.info("Actualizando vehiculo... ");
+        logger.info("Actualizando coche... ");
 
         Coche x = jsonTransformerC.getObjet(request.body(), Coche.class);
         Result<Coche> result = service.updateC(x);
@@ -179,7 +179,7 @@ public class VehiculoController {
         return result;
     }
     public static Result<Moto> updMotos(Request request, Response response) {
-        logger.info("Actualizando vehiculo... ");
+        logger.info("Actualizando moto... ");
 
         Moto x = jsonTransformerM.getObjet(request.body(), Moto.class);
         Result<Moto> result = service.updateM(x);
@@ -194,7 +194,7 @@ public class VehiculoController {
         return result;
     }
     public static Result<Bicicleta> updBicis(Request request, Response response) {
-        logger.info("Actualizando vehiculo... ");
+        logger.info("Actualizando bici... ");
 
         Bicicleta x = jsonTransformerB.getObjet(request.body(), Bicicleta.class);
         Result<Bicicleta> result = service.updateB(x);
@@ -209,7 +209,7 @@ public class VehiculoController {
         return result;
     }
     public static Result<Patinete> updPatin(Request request, Response response) {
-        logger.info("Actualizando vehiculo... ");
+        logger.info("Actualizando patin... ");
 
         Patinete x = jsonTransformerP.getObjet(request.body(), Patinete.class);
         Result<Patinete> result = service.updateP(x);

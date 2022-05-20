@@ -14,11 +14,11 @@ public class Vehiculo {
     private int bateria;
     private Date fechaAdq;
     private String estado;
-    private int idCarnet;
+    private String idCarnet;
     private Timestamp changeDts;
     private String changeBy;
 
-    public Vehiculo(String matricula, float precioHora, String marca, String descripcion, String color, int bateria, Date fechaAdq, String estado, int idCarnet, Timestamp changeDts, String changeBy) {
+    public Vehiculo(String matricula, float precioHora, String marca, String descripcion, String color, int bateria, Date fechaAdq, String estado, String idCarnet, Timestamp changeDts, String changeBy) {
         this.matricula = matricula;
         this.precioHora = precioHora;
         this.marca = marca;
@@ -35,7 +35,7 @@ public class Vehiculo {
     public Vehiculo() {
     }
 
-    public Vehiculo(String matricula, float precioHora, String marca, String descripcion, String color, int bateria, Date fechaAdq, String estado, int idCarnet) {
+    public Vehiculo(String matricula, float precioHora, String marca, String descripcion, String color, int bateria, Date fechaAdq, String estado, String idCarnet) {
         this.matricula = matricula;
         this.precioHora = precioHora;
         this.marca = marca;
@@ -111,11 +111,11 @@ public class Vehiculo {
         this.estado = estado;
     }
 
-    public int getIdCarnet() {
+    public String getIdCarnet() {
         return idCarnet;
     }
 
-    public void setIdCarnet(int idCarnet) {
+    public void setIdCarnet(String idCarnet) {
         this.idCarnet = idCarnet;
     }
 
