@@ -11,13 +11,26 @@ import java.util.List;
 
 /**
  * vehiculos: getALL=ok
- * coche: get=ok, add=ok , dlt=ok , upd=KO
- * patin: get=ok, add=KO , dlt=? , upd=?
- * motos: get=ok, add=KO  , dlt=? , udt=?
+ * coche: get=ok, add=ok , dlt=ok , upd=ORA-01403
+ * patin=OK
+ * motos=OK
+ ***********SON MOLT ESQUISITOS EN ELS NOMS****************
  * bicis=?
+ *{ prueba de add funciona
+ *         "matricula": "PATII",
+ *         "precioHora": 2,
+ *         "marca": "marca",
+ *         "color": "verde",
+ *         "bateria": 45,
+ *         "fechaAdq": "07/01/2021",
+ *         "estado": "preparado",
+ *         "idCarnet": "B",
+ *         "descripcion":"descIIpcion",
+ *         "tamanyo": 8,
+ *         "numRuedas": 5
  *
- * TODO add patin y moto : ORA-01403: No se ha encontrado ningún dato
- * TODO UPDATE (de moment coche):  No se ha encontrado ningún dato (El error ORA-01403 significa básicamente que una consulta que debió devolver datos no devuelve ninguno.)
+ *     }
+ * (El error ORA-01403 significa básicamente que una consulta que debió devolver datos no devuelve ninguno)
  */
 public class ImpVehiculoService implements IVehiculoService {
 
@@ -150,7 +163,7 @@ public class ImpVehiculoService implements IVehiculoService {
     @Override
     public Result<Coche> updateC(Coche v) {
         DataSource ds = MyDataSource.getMyOracleDataSource();
-        String sql = "{call GESTIONVEHICULOS.actualizarCoche(?,?,?,?,?,?,?,?,?,?,?)}";
+        String sql = "{call GESTIONVEHICULOS.actualizarcoche(?,?,? ,?,?,? ,?,?,? ,?,?)}";
 
         try (Connection con = ds.getConnection();
              CallableStatement statement = con.prepareCall(sql)) {
