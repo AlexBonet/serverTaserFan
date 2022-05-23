@@ -31,6 +31,8 @@ import java.util.List;
  *
  *     }
  * (El error ORA-01403 significa básicamente que una consulta que debió devolver datos no devuelve ninguno)
+ * TODO vore el recycler view en ANDROID
+ *
  */
 public class ImpVehiculoService implements IVehiculoService {
 
