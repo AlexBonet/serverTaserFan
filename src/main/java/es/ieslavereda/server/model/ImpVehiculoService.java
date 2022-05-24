@@ -31,6 +31,8 @@ import java.util.List;
  *
  *     }
  * (El error ORA-01403 significa básicamente que una consulta que debió devolver datos no devuelve ninguno)
+ *
+ * TODO LO DE LA BICI TE QUE SER ALGO DE DOULE PER FLOAT
  * TODO vore el recycler view en ANDROID
  * TODO FER QUE EL GET ALL PILLE DEL PROCEDURE DE LISTARVEHICULOS [MIRAR COM FER ELS IF O ALGO PA QUE FILTRE EN ANDROID]
  */
@@ -331,7 +333,7 @@ public class ImpVehiculoService implements IVehiculoService {
             CallableStatement stmt = con.prepareCall(sql)) {
 
             stmt.setString(1,matricula);
-            stmt.registerOutParameter(2, Types.FLOAT);
+            stmt.registerOutParameter(2, Types.DOUBLE);
             stmt.registerOutParameter(3,Types.VARCHAR);
             stmt.registerOutParameter(4, Types.VARCHAR);
             stmt.registerOutParameter(5, Types.VARCHAR);
