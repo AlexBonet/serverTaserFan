@@ -40,11 +40,12 @@ public class ImpVehiculoService implements IVehiculoService {
 
     /**OBTENER TODOS LOS VEHICULOS*/
     @Override
-    public List<Vehiculo> getAll() {
+    public List<Vehiculo> getAll(String tipo) {
         List<Vehiculo> vehiculos = new ArrayList<>();
 
         DataSource ds = MyDataSource.getMyOracleDataSource();
-        String sql = "SELECT * FROM vehiculo v ";
+        String sql = "{call GESTIONVEHICULOS.listarvehiculos("+ tipo +")}" +
+                     " select DISTINCT * from tmp_estructura";
 
         try (Connection con = ds.getConnection();
              CallableStatement stmt = con.prepareCall(sql);
@@ -346,7 +347,7 @@ public class ImpVehiculoService implements IVehiculoService {
             stmt.execute();
 
             String v_matricula = matricula;
-            float v_precioHora = stmt.getFloat(2);
+            float v_precioHora = (float) stmt.getDouble(2);
             String v_marca = stmt.getString(3);
             String v_descripcion = stmt.getString(4);
             String v_color = stmt.getString(5);
@@ -394,11 +395,11 @@ public class ImpVehiculoService implements IVehiculoService {
         String sql = "{call GESTIONVEHICULOS.insertarBici(?,?,? ,?,?,? ,?,?,? ,?)}";
 
         try (Connection con = ds.getConnection();
-             CallableStatement statement = con.prepareCall(sql)) {//lo que pides con callableStatment es que haga lo de abajo y no arriba??
+             CallableStatement statement = con.prepareCall(sql)) {
 
             int pos = 0;
             statement.setString(++pos, v.getMatricula());
-            statement.setFloat(++pos, v.getPrecioHora());
+            statement.setDouble(++pos, v.getPrecioHora());
             statement.setString(++pos, v.getMarca());
             statement.setString(++pos, v.getDescripcion());
             statement.setString(++pos, v.getColor());
@@ -420,14 +421,14 @@ public class ImpVehiculoService implements IVehiculoService {
     @Override
     public Result<Bicicleta> updateB(Bicicleta v) {
         DataSource ds = MyDataSource.getMyOracleDataSource();
-        String sql = "{call GESTIONVEHICULOS.actualizarBici(?,?,?,?,?,?,?,?,?,?,?)}";
+        String sql = "{call GESTIONVEHICULOS.actualizarBici(?,?,?, ?,?,? ,?,?,? ,?)}";
 
         try (Connection con = ds.getConnection();
              CallableStatement statement = con.prepareCall(sql)) {
 
             int pos = 0;
             statement.setString(++pos, v.getMatricula());
-            statement.setFloat(++pos, v.getPrecioHora());
+            statement.setDouble(++pos, v.getPrecioHora());
             statement.setString(++pos, v.getMarca());
             statement.setString(++pos, v.getDescripcion());
             statement.setString(++pos, v.getColor());
@@ -577,4 +578,30 @@ public class ImpVehiculoService implements IVehiculoService {
         }
     }
 
+    @Override
+    public List<Vehiculo> getAl() {
+        List<Vehiculo> vehiculos = new ArrayList<>();
+
+        DataSource ds = MyDataSource.getMyOracleDataSource();
+        String sql = "select * from vehiculo";
+
+        try (Connection con = ds.getConnection();
+             CallableStatement stmt = con.prepareCall(sql);
+             ResultSet rs = stmt.executeQuery()) {
+
+            Vehiculo v;
+            while (rs.next()) {
+                v = new Vehiculo(rs.getString("matricula"), rs.getFloat("precioHora"),
+                        rs.getString("marca"), rs.getString("descripcion"),
+                        rs.getString("color"), rs.getInt("bateria"),
+                        rs.getDate("fechaAdq"), rs.getString("estado"), rs.getString("idCarnet")
+                );
+                vehiculos.add(v);
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return vehiculos;
+    }
 }

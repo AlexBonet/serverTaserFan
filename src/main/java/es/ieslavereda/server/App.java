@@ -15,6 +15,8 @@ public class App {
 
         //VEHICULOS
         get(API.Routes.GETALL, VehiculoController::getAll, new JsonTransformer<>());
+        get(API.Routes.GETS, VehiculoController::getAl, new JsonTransformer<>());
+
 
         //COCHE
         get(API.Routes.COCHE, VehiculoController::getCoche, new JsonTransformer<>());

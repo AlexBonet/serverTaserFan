@@ -9,6 +9,7 @@ public class API {
 
         //Vehiculos : tenim soles una ruta perque cuant fem algo en la app dira que tipo es [post,get,put,dlt]
         public static final String GETALL = "/vehiculos";
+        public static final String GETS = "/vehicles";
         public static final String COCHE = "/coche";
         public static final String MOTOS = "/motos";
         public static final String PATIN = "/patin";

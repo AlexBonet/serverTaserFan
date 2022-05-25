@@ -30,7 +30,7 @@ public class VehiculoController {
     /**Obtener todos los vehiculos*/
     public static List<Vehiculo> getAll(Request request, Response response) {
         logger.info("Obteniendo vehiculos... ");
-        return service.getAll();
+        return service.getAll(request.queryParams("tipo"));
     }
 
     /**Obtener*/
@@ -229,4 +229,8 @@ public class VehiculoController {
         return result;
     }
 
+    public static Object getAl(Request request, Response response) {
+        logger.info("Obteniendo vehiculos... ");
+        return service.getAl();
+    }
 }
