@@ -33,6 +33,12 @@ public class VehiculoController {
         return service.getAll(request.queryParams("tipo"));
     }
 
+    public static Object getAl(Request request, Response response) {
+        logger.info("Obteniendo vehiculos... ");
+        return service.getAl();
+    }
+
+
     /**Obtener*/
     public static Result<Coche> getCoche(Request request, Response response) {
         logger.info("Obteniedo coche... ");
@@ -229,8 +235,4 @@ public class VehiculoController {
         return result;
     }
 
-    public static Object getAl(Request request, Response response) {
-        logger.info("Obteniendo vehiculos... ");
-        return service.getAl();
-    }
 }

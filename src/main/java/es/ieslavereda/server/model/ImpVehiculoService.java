@@ -331,7 +331,7 @@ public class ImpVehiculoService implements IVehiculoService {
         String sql = "{call GESTIONVEHICULOS.consultarBici(?,?,?, ?,?,? ,?,?,? ,?)}";
 
         try (Connection con = ds.getConnection();
-            CallableStatement stmt = con.prepareCall(sql)) {
+             CallableStatement stmt = con.prepareCall(sql)) {
 
             stmt.setString(1,matricula);
             stmt.registerOutParameter(2, Types.DOUBLE);
