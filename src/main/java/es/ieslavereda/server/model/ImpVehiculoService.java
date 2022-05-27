@@ -3,15 +3,17 @@ package es.ieslavereda.server.model;
 import es.ieslavereda.model.MyDataSource;
 import es.ieslavereda.model.Result;
 import es.ieslavereda.model.clases.vehiculos.*;
+import oracle.jdbc.internal.OracleTypes;
 
 import javax.sql.DataSource;
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 /**
  * vehiculos: getALL=ok
- * coche: get=ok, add=ok , dlt=ok , upd=ORA-01403
+ * coche=ok
  * patin=OK
  * motos=OK
  ***********SON MOLT ESQUISITOS EN ELS NOMS****************
@@ -33,30 +35,54 @@ import java.util.List;
  * (El error ORA-01403 significa básicamente que una consulta que debió devolver datos no devuelve ninguno)
  *
  * TODO LO DE LA BICI TE QUE SER ALGO DE DOULE PER FLOAT
- * TODO vore el recycler view en ANDROID
  * TODO FER QUE EL GET ALL PILLE DEL PROCEDURE DE LISTARVEHICULOS [MIRAR COM FER ELS IF O ALGO PA QUE FILTRE EN ANDROID]
  */
 public class ImpVehiculoService implements IVehiculoService {
 
     /**OBTENER TODOS LOS VEHICULOS*/
     @Override
-    public List<Vehiculo> getAll(String tipo) {
+    public List<Vehiculo> getAll() {
+        List<Vehiculo> vehiculos = new LinkedList<>();
+        TipoVehiculos tipos[] = {
+                TipoVehiculos.COCHE,
+                TipoVehiculos.MOTOS,
+                TipoVehiculos.PATIN,
+                TipoVehiculos.BICIS
+        };
+        for (int i = 0; i < 4; i++) {
+            for (Vehiculo vel : getAll(tipos[i])) {
+                vehiculos.add(vel);
+            }
+        }
+        return vehiculos;
+    }
+
+
+    @Override
+    public List<Vehiculo> getAll(TipoVehiculos tipo) {
         List<Vehiculo> vehiculos = new ArrayList<>();
+        ResultSet rs;
 
         DataSource ds = MyDataSource.getMyOracleDataSource();
-        String sql = "{call GESTIONVEHICULOS.listarvehiculos("+ tipo +")}" +
-                     " select DISTINCT * from tmp_estructura";
+        String sql = "{call GESTIONVEHICULOS.listarvehiculos(?, ?)}";
 
         try (Connection con = ds.getConnection();
-             CallableStatement stmt = con.prepareCall(sql);
-             ResultSet rs = stmt.executeQuery()) {
+             CallableStatement stmt = con.prepareCall(sql)
+             ) {
+
+            stmt.setString(1, tipo.toString());
+            stmt.registerOutParameter(2, OracleTypes.CURSOR);
+            stmt.execute();
+
+            rs = (ResultSet) stmt.getObject(2);
 
             Vehiculo v;
             while (rs.next()) {
                 v = new Vehiculo(rs.getString("matricula"), rs.getFloat("precioHora"),
                         rs.getString("marca"), rs.getString("descripcion"),
                         rs.getString("color"), rs.getInt("bateria"),
-                        rs.getDate("fechaAdq"), rs.getString("estado"), rs.getString("idCarnet")
+                        rs.getDate("fechaAdq"), rs.getString("estado"),
+                        rs.getString("idCarnet"),tipo
                 );
                 vehiculos.add(v);
             }
@@ -103,7 +129,7 @@ public class ImpVehiculoService implements IVehiculoService {
             int v_numPlazas = stmt.getInt(10);
             int v_numPuertas = stmt.getInt(11);
 
-            c = new Coche(v_matricula, v_precioHora, v_marca, v_descripcion, v_color, v_bateria, date, v_estado,v_idCarnet, v_numPlazas, v_numPuertas);
+            c = new Coche(v_matricula, v_precioHora, v_marca, v_descripcion, v_color, v_bateria, date, v_estado,v_idCarnet,TipoVehiculos.COCHE, v_numPlazas, v_numPuertas);
 
         } catch (SQLException e) {
             e.printStackTrace();
@@ -231,7 +257,7 @@ public class ImpVehiculoService implements IVehiculoService {
             int v_cilindrada = stmt.getInt(10);
             int v_velMax = stmt.getInt(11);
 
-            m = new Moto(v_matricula, v_precioHora, v_marca, v_descripcion, v_color, v_bateria, date, v_estado,v_idCarnet, v_cilindrada, v_velMax);
+            m = new Moto(v_matricula, v_precioHora, v_marca, v_descripcion, v_color, v_bateria, date, v_estado,v_idCarnet,TipoVehiculos.MOTOS, v_cilindrada, v_velMax);
 
         } catch (SQLException e) {
             e.printStackTrace();
@@ -357,7 +383,7 @@ public class ImpVehiculoService implements IVehiculoService {
             String v_idCarnet = stmt.getString(9);
             String tipo = stmt.getString(10);
 
-            b = new Bicicleta(v_matricula, v_precioHora, v_marca, v_descripcion, v_color, v_bateria, date, v_estado,v_idCarnet, tipo);
+            b = new Bicicleta(v_matricula, v_precioHora, v_marca, v_descripcion, v_color, v_bateria, date, v_estado,v_idCarnet,TipoVehiculos.BICIS, tipo);
 
         } catch (SQLException e) {
             e.printStackTrace();
@@ -485,7 +511,7 @@ public class ImpVehiculoService implements IVehiculoService {
             int v_numRuedas = stmt.getInt(10);
             int v_tamanyo = stmt.getInt(11);
 
-            p = new Patinete(v_matricula, v_precioHora, v_marca, v_descripcion, v_color, v_bateria, date, v_estado,v_idCarnet, v_numRuedas, v_tamanyo);
+            p = new Patinete(v_matricula, v_precioHora, v_marca, v_descripcion, v_color, v_bateria, date, v_estado,v_idCarnet,TipoVehiculos.PATIN, v_numRuedas, v_tamanyo);
 
         } catch (SQLException e) {
                 e.printStackTrace();
@@ -578,30 +604,33 @@ public class ImpVehiculoService implements IVehiculoService {
         }
     }
 
-    @Override
-    public List<Vehiculo> getAl() {
-        List<Vehiculo> vehiculos = new ArrayList<>();
+//    @Override
+//    public List<Vehiculo> getAl() {
+//        List<Vehiculo> vehiculos = new ArrayList<>();
+//
+//        DataSource ds = MyDataSource.getMyOracleDataSource();
+//        String sql = "select * from vehiculo";
+//
+//        try (Connection con = ds.getConnection();
+//             CallableStatement stmt = con.prepareCall(sql);
+//             ResultSet rs = stmt.executeQuery()) {
+//
+//            Vehiculo v;
+//            while (rs.next()) {
+//                v = new Vehiculo(rs.getString("matricula"), rs.getFloat("precioHora"),
+//                        rs.getString("marca"), rs.getString("descripcion"),
+//                        rs.getString("color"), rs.getInt("bateria"),
+//                        rs.getDate("fechaAdq"), rs.getString("estado"),
+//                        rs.getString("idCarnet"), ?
+//                );
+//                vehiculos.add(v);
+//            }
+//
+//        } catch (SQLException e) {
+//            e.printStackTrace();
+//        }
+//        return vehiculos;
+//    }
 
-        DataSource ds = MyDataSource.getMyOracleDataSource();
-        String sql = "select * from vehiculo";
 
-        try (Connection con = ds.getConnection();
-             CallableStatement stmt = con.prepareCall(sql);
-             ResultSet rs = stmt.executeQuery()) {
-
-            Vehiculo v;
-            while (rs.next()) {
-                v = new Vehiculo(rs.getString("matricula"), rs.getFloat("precioHora"),
-                        rs.getString("marca"), rs.getString("descripcion"),
-                        rs.getString("color"), rs.getInt("bateria"),
-                        rs.getDate("fechaAdq"), rs.getString("estado"), rs.getString("idCarnet")
-                );
-                vehiculos.add(v);
-            }
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return vehiculos;
-    }
 }

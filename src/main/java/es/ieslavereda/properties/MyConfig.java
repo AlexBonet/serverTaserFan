@@ -5,8 +5,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Properties;
-//TODO, mirar  si esta bé els noms en els gets y mirar de tindre bé els properties
-//todo mirar lo de la ip y puerto en custom properties
+
 public class MyConfig {
 
     private static MyConfig instance;

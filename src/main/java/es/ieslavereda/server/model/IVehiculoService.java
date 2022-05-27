@@ -6,11 +6,9 @@ import es.ieslavereda.model.clases.vehiculos.*;
 import java.util.List;
 
 public interface IVehiculoService {
-    List<Vehiculo> getAll(String tipo);
-//    Result<Vehiculo> delete(TipoVehiculo vehiculo,String matricula);
-//    Result<Vehiculo> update(TipoVehiculo vehiculo,Vehiculo v);
-//    Result<Vehiculo> add(TipoVehiculo vehiculo,Vehiculo v);
-//    Result<Vehiculo> get(TipoVehiculo vehiculo,String matricula); //fa falta?
+//    List<Vehiculo> getAl();
+    List<Vehiculo> getAll();
+    List<Vehiculo> getAll(TipoVehiculos tipo);
 
     /*COCHES*/
     Result<Coche> getC(String matricula);
@@ -36,5 +34,4 @@ public interface IVehiculoService {
     Result<Patinete> updateP(Patinete p);
     Result<Patinete> addP(Patinete p);
 
-    List<Vehiculo> getAl();
 }

@@ -10,9 +10,6 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * TODO autentificar en android
- */
 public class ImpEmpleadoService implements IEmpleadoService {
     @Override
     public List<Empleado> getAll() {
