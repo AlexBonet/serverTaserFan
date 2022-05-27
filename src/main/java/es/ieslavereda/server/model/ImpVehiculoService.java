@@ -3,7 +3,7 @@ package es.ieslavereda.server.model;
 import es.ieslavereda.model.MyDataSource;
 import es.ieslavereda.model.Result;
 import es.ieslavereda.model.clases.vehiculos.*;
-import oracle.jdbc.internal.OracleTypes;
+import oracle.jdbc.OracleTypes;
 
 import javax.sql.DataSource;
 import java.sql.*;
@@ -64,7 +64,7 @@ public class ImpVehiculoService implements IVehiculoService {
         ResultSet rs;
 
         DataSource ds = MyDataSource.getMyOracleDataSource();
-        String sql = "{call GESTIONVEHICULOS.listarvehiculos(?, ?)}";
+        String sql = "{call GESTIONVEHICULOS.listarvehiculos(?,?)}";
 
         try (Connection con = ds.getConnection();
              CallableStatement stmt = con.prepareCall(sql)
@@ -78,11 +78,11 @@ public class ImpVehiculoService implements IVehiculoService {
 
             Vehiculo v;
             while (rs.next()) {
-                v = new Vehiculo(rs.getString("matricula"), rs.getFloat("precioHora"),
-                        rs.getString("marca"), rs.getString("descripcion"),
-                        rs.getString("color"), rs.getInt("bateria"),
-                        rs.getDate("fechaAdq"), rs.getString("estado"),
-                        rs.getString("idCarnet"),tipo
+                //super(matricula, precioHora, marca, descripcion, color, bateria, fechaAdq, estado, idCarnet, tipoVehiculo);
+//                String matricula, float precioHora, String marca, String color, TipoVehiculos tipoVehiculo
+                v = new Vehiculo(rs.getString("c1"), rs.getFloat("n1"),
+                        rs.getString("c2"), rs.getString("c3"), rs.getInt("n2"),
+                        rs.getString("c5"),rs.getString("c6"),tipo
                 );
                 vehiculos.add(v);
             }

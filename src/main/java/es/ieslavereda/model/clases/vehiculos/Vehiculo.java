@@ -1,7 +1,5 @@
 package es.ieslavereda.model.clases.vehiculos;
 
-import oracle.sql.DATE;
-
 import java.sql.Date;
 import java.sql.Timestamp;
 
@@ -50,6 +48,17 @@ public class Vehiculo {
     }
 
     public Vehiculo() {
+    }
+
+    public Vehiculo(String matricula, float precioHora, String marca, String color, int bateria, String estado, String idCarnet,TipoVehiculos tipoVehiculo) {
+        this.matricula = matricula;
+        this.precioHora = precioHora;
+        this.marca = marca;
+        this.color = color;
+        this.bateria = bateria;
+        this.estado = estado;
+        this.idCarnet = idCarnet;
+        this.tipoVehiculo=tipoVehiculo;
     }
 
     public String getMatricula() {
