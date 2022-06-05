@@ -11,32 +11,6 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
-/**
- * vehiculos: getALL=ok
- * coche=ok
- * patin=OK
- * motos=OK
- ***********SON MOLT ESQUISITOS EN ELS NOMS****************
- * bicis=?
- *{ prueba de add funciona
- *         "matricula": "PATII",
- *         "precioHora": 2,
- *         "marca": "marca",
- *         "color": "verde",
- *         "bateria": 45,
- *         "fechaAdq": "07/01/2021",
- *         "estado": "preparado",
- *         "idCarnet": "B",
- *         "descripcion":"descIIpcion",
- *         "tamanyo": 8,
- *         "numRuedas": 5
- *
- *     }
- * (El error ORA-01403 significa básicamente que una consulta que debió devolver datos no devuelve ninguno)
- *
- * TODO LO DE LA BICI TE QUE SER ALGO DE DOULE PER FLOAT
- * TODO FER QUE EL GET ALL PILLE DEL PROCEDURE DE LISTARVEHICULOS [MIRAR COM FER ELS IF O ALGO PA QUE FILTRE EN ANDROID]
- */
 public class ImpVehiculoService implements IVehiculoService {
 
     /**OBTENER TODOS LOS VEHICULOS*/
@@ -78,8 +52,6 @@ public class ImpVehiculoService implements IVehiculoService {
 
             Vehiculo v;
             while (rs.next()) {
-                //super(matricula, precioHora, marca, descripcion, color, bateria, fechaAdq, estado, idCarnet, tipoVehiculo);
-//                String matricula, float precioHora, String marca, String color, TipoVehiculos tipoVehiculo
                 v = new Vehiculo(rs.getString("c1"), rs.getFloat("n1"),
                         rs.getString("c2"), rs.getString("c3"), rs.getInt("n2"),
                         rs.getString("c5"),rs.getString("c6"),tipo
@@ -603,34 +575,4 @@ public class ImpVehiculoService implements IVehiculoService {
             return new Result.Error(444, "ALGUN ERROR CAPTURADO: " + e.getMessage());
         }
     }
-
-//    @Override
-//    public List<Vehiculo> getAl() {
-//        List<Vehiculo> vehiculos = new ArrayList<>();
-//
-//        DataSource ds = MyDataSource.getMyOracleDataSource();
-//        String sql = "select * from vehiculo";
-//
-//        try (Connection con = ds.getConnection();
-//             CallableStatement stmt = con.prepareCall(sql);
-//             ResultSet rs = stmt.executeQuery()) {
-//
-//            Vehiculo v;
-//            while (rs.next()) {
-//                v = new Vehiculo(rs.getString("matricula"), rs.getFloat("precioHora"),
-//                        rs.getString("marca"), rs.getString("descripcion"),
-//                        rs.getString("color"), rs.getInt("bateria"),
-//                        rs.getDate("fechaAdq"), rs.getString("estado"),
-//                        rs.getString("idCarnet"), ?
-//                );
-//                vehiculos.add(v);
-//            }
-//
-//        } catch (SQLException e) {
-//            e.printStackTrace();
-//        }
-//        return vehiculos;
-//    }
-
-
 }
