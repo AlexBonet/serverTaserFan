@@ -18,10 +18,6 @@ public class Bicicleta extends Vehiculo {
         this.tipo = tipo;
     }
 
-    public Bicicleta(String tipo) {
-        this.tipo = tipo;
-    }
-
     public String getTipo() {
         return tipo;
     }

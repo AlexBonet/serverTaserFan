@@ -66,18 +66,6 @@ public class MyConfig {
         appProperties.setProperty("USERNAME",username);
         save();
     }
-    public String getPassword(){
-        return appProperties.getProperty("PASSWORD");
-    }
-    public String getDBHost(){
-        return appProperties.getProperty("DB_HOST");
-    }
-    public String getDBPort(){
-        return appProperties.getProperty("DB_PORT");
-    }
-    public String getDBSchema(){
-        return appProperties.getProperty("DB_SCHEMA");
-    }
 
     public String getOracleDBHost() {
         return appProperties.getProperty("ORACLE_DB_HOST");

@@ -516,7 +516,7 @@ public class ImpVehiculoService implements IVehiculoService {
     }
 
     @Override
-    public Result<Patinete> addP(Patinete v) {// todo - error
+    public Result<Patinete> addP(Patinete v) {
         DataSource ds = MyDataSource.getMyOracleDataSource();
         String sql = "{call GESTIONVEHICULOS.insertarPatinete(?,?,? ,?,?,? ,?,?,? ,?,?)}";
 

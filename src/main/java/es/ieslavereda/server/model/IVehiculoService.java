@@ -6,7 +6,6 @@ import es.ieslavereda.model.clases.vehiculos.*;
 import java.util.List;
 
 public interface IVehiculoService {
-//    List<Vehiculo> getAl();
     List<Vehiculo> getAll();
     List<Vehiculo> getAll(TipoVehiculos tipo);
 

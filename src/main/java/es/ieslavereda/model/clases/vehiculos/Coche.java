@@ -21,11 +21,6 @@ public class Coche extends Vehiculo {
         this.numPuertas = numPuertas;
     }
 
-    public Coche(int numPlazas, int numPuertas) {
-        this.numPlazas = numPlazas;
-        this.numPuertas = numPuertas;
-    }
-
     public int getNumPlazas() {
         return numPlazas;
     }

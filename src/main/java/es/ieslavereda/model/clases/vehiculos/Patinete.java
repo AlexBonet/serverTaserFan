@@ -21,11 +21,6 @@ public class Patinete extends Vehiculo {
         this.tamanyo = tamanyo;
     }
 
-    public Patinete(int numRuedas, int tamanyo) {
-        this.numRuedas = numRuedas;
-        this.tamanyo = tamanyo;
-    }
-
     public int getNumRuedas() {
         return numRuedas;
     }

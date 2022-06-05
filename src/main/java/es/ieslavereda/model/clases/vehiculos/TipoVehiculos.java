@@ -1,5 +1,4 @@
 package es.ieslavereda.model.clases.vehiculos;
-//TODO POSAR EL TIPO
 public enum TipoVehiculos {
     COCHE("COCHE"), MOTOS("MOTOS"), BICIS("BICIS"), PATIN("PATIN");
 

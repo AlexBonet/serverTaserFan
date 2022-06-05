@@ -12,10 +12,6 @@ import spark.Response;
 
 import java.util.List;
 
-/**
- * TODO FER QUE EL GET ALL PILLE DEL PROCEDURE DE LISTARVEHICULOS
- */
-
 public class VehiculoController {
     static Logger logger = LoggerFactory.getLogger(VehiculoController.class);
 
@@ -32,12 +28,6 @@ public class VehiculoController {
         logger.info("Obteniendo vehiculos... ");
         return service.getAll();
     }
-
-//    public static Object getAl(Request request, Response response) {
-//        logger.info("Obteniendo vehiculos... ");
-//        return service.getAl();
-//    }
-
 
     /**Obtener*/
     public static Result<Coche> getCoche(Request request, Response response) {

@@ -21,11 +21,6 @@ public class Moto extends Vehiculo {
         this.cilindrada = cilindrada;
     }
 
-    public Moto(int velocidadMax, int cilindrada) {
-        this.velocidadMax = velocidadMax;
-        this.cilindrada = cilindrada;
-    }
-
     public int getVelocidadMax() {
         return velocidadMax;
     }
